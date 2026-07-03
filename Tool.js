@@ -17,7 +17,7 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
                 method: `GET`,
                 url: 网站地址数组[当前索引],
                 onload: function (响应信息) {
-                    响应函数(响应信息, 当前索引);
+                    响应函数(响应信息参数, 当前索引参数);
 
                     可用线程++;
                     if (请求情况数组[当前索引] == `请求成功`) {
@@ -68,19 +68,19 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
         }
     }
 
-    function 发起指定HTTP请求函数(当前索引) {
-        if (当前索引 >= 网站地址数组.length) {
+    function 发起指定HTTP请求函数(当前索引参数) {
+        if (当前索引参数 >= 网站地址数组.length) {
             return;
         }
         可用线程--;
         GM_xmlhttpRequest({
             method: `GET`,
-            url: 网站地址数组[当前索引],
+            url: 网站地址数组[当前索引参数],
             onload: function (响应信息) {
-                响应函数(响应信息, 当前索引);
+                响应函数(响应信息, 当前索引参数);
 
                 可用线程++;
-                if (请求情况数组[当前索引] == `请求成功`) {
+                if (请求情况数组[当前索引参数] == `请求成功`) {
                     完成数量++;
                     记录日志函数(`✅ 进度：${完成数量}/${网站地址数组.length}`, `日志`);
                     if (完成数量 < 网站地址数组.length) {
@@ -91,21 +91,21 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
                         return;
                     }
                 }
-                else if (请求情况数组[当前索引] == `重新请求`) {
-                    发起指定HTTP请求函数(当前索引);
+                else if (请求情况数组[当前索引参数] == `重新请求`) {
+                    发起指定HTTP请求函数(当前索引参数);
                 }
                 else {
-                    记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引]}\n当前索引：${当前索引}`, `报错`);
+                    记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引参数]}\n当前索引：${当前索引参数}`, `报错`);
                     return;
                 }
             },
             onerror: function (报错信息) {
-                报错函数(报错信息, 当前索引);
+                报错函数(报错信息, 当前索引参数);
 
-                记录日志函数(`❌ 访问网址失败：\n${网站地址数组[当前索引]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
+                记录日志函数(`❌ 访问网址失败：\n${网站地址数组[当前索引参数]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
 
                 可用线程++;
-                if (请求情况数组[当前索引] == `请求成功`) {
+                if (请求情况数组[当前索引参数] == `请求成功`) {
                     完成数量++;
                     记录日志函数(`✅ 进度：${完成数量}/${网站地址数组.length}`, `日志`);
                     if (完成数量 < 网站地址数组.length) {
@@ -116,11 +116,11 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
                         return;
                     }
                 }
-                else if (请求情况数组[当前索引] == `重新请求`) {
-                    发起指定HTTP请求函数(当前索引);
+                else if (请求情况数组[当前索引参数] == `重新请求`) {
+                    发起指定HTTP请求函数(当前索引参数);
                 }
                 else {
-                    记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引]}\n当前索引：${当前索引}`, `报错`);
+                    记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引参数]}\n当前索引：${当前索引参数}`, `报错`);
                     return;
                 }
             }
@@ -128,12 +128,12 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
     }
 }
 
-function 查找网页元素函数(目标文档, 步骤) {
-    let iframe元素 = 递归搜索Iframe函数(目标文档, 步骤);
+function 查找网页元素函数(目标文档参数, 执行步骤参数) {
+    let iframe元素 = 递归搜索Iframe函数(目标文档参数, 执行步骤参数);
     // 切换到iframe文档
     if (iframe元素) {
         try {
-            目标文档 = iframe元素.contentDocument || iframe元素.contentWindow.document;
+            目标文档参数 = iframe元素.contentDocument || iframe元素.contentWindow.document;
         }
         catch (e) {
             记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
@@ -141,26 +141,26 @@ function 查找网页元素函数(目标文档, 步骤) {
         }
     }
 
-    if (步骤.选择器) {
-        return 目标文档.querySelector(步骤.选择器);
+    if (执行步骤参数.选择器) {
+        return 目标文档参数.querySelector(执行步骤参数.选择器);
         //return 目标文档.querySelectorAll(步骤.选择器)[0];
     }
-    else if (步骤.类名称) {
-        return 目标文档.getElementsByClassName(步骤.类名称)[0];
+    else if (执行步骤参数.类名称) {
+        return 目标文档参数.getElementsByClassName(执行步骤参数.类名称)[0];
     }
-    else if (步骤.元素名称) {
-        return 目标文档.getElementsByName(步骤.元素名称)[0];
+    else if (执行步骤参数.元素名称) {
+        return 目标文档参数.getElementsByName(执行步骤参数.元素名称)[0];
     }
-    else if (步骤.元素ID) {
-        return 目标文档.getElementById(步骤.元素ID);
+    else if (执行步骤参数.元素ID) {
+        return 目标文档参数.getElementById(执行步骤参数.元素ID);
     }
-    else if (步骤.标签名称) {
-        return 目标文档.getElementsByTagName(步骤.标签名称)[0];
+    else if (执行步骤参数.标签名称) {
+        return 目标文档参数.getElementsByTagName(执行步骤参数.标签名称)[0];
     }
-    else if (步骤.XPath) {
-        return 目标文档.evaluate(
-            步骤.XPath,
-            目标文档,
+    else if (执行步骤参数.XPath) {
+        return 目标文档参数.evaluate(
+            执行步骤参数.XPath,
+            目标文档参数,
             null,
             XPathResult.FIRST_ORDERED_NODE_TYPE,
             null
@@ -168,22 +168,22 @@ function 查找网页元素函数(目标文档, 步骤) {
     }
 }
 
-function 递归搜索Iframe函数(文档, 元素配置) {
-    let Iframe数组 = 文档.querySelectorAll(`iframe`);
+function 递归搜索Iframe函数(目标文档参数, 元素配置参数) {
+    let Iframe数组 = 目标文档参数.querySelectorAll(`iframe`);
 
-    if (元素配置.IframeID) {
+    if (元素配置参数.IframeID) {
         for (let iframe of Iframe数组) {
-            if (元素配置?.是否模糊查询Iframe) {
-                if (iframe.id.includes(元素配置.IframeID)) return iframe;
+            if (元素配置参数?.是否模糊查询Iframe) {
+                if (iframe.id.includes(元素配置参数.IframeID)) return iframe;
             }
             else {
-                if (iframe.id == 元素配置.IframeID) return iframe;
+                if (iframe.id == 元素配置参数.IframeID) return iframe;
             }
         }
         for (let iframe of Iframe数组) {
             try {
                 let 目标文档 = iframe.contentDocument || iframe.contentWindow.document;
-                let 目标Iframe = 递归搜索Iframe函数(目标文档, 元素配置);
+                let 目标Iframe = 递归搜索Iframe函数(目标文档, 元素配置参数);
                 if (目标Iframe) return 目标Iframe;
             }
             catch (e) {
@@ -191,14 +191,14 @@ function 递归搜索Iframe函数(文档, 元素配置) {
             }
         }
     }
-    else if (元素配置.IframeSRC) {
+    else if (元素配置参数.IframeSRC) {
         for (let iframe of Iframe数组) {
-            if (iframe.src.includes(元素配置.IframeSRC)) return iframe;
+            if (iframe.src.includes(元素配置参数.IframeSRC)) return iframe;
         }
         for (let iframe of Iframe数组) {
             try {
                 let 目标文档 = iframe.contentDocument || iframe.contentWindow.document;
-                let 目标Iframe = 递归搜索Iframe函数(目标文档, 元素配置);
+                let 目标Iframe = 递归搜索Iframe函数(目标文档, 元素配置参数);
                 if (目标Iframe) return 目标Iframe;
             }
             catch (e) {
@@ -210,78 +210,78 @@ function 递归搜索Iframe函数(文档, 元素配置) {
     return null;
 }
 
-function 操作网页元素函数(目标元素, 元素配置) {
-    switch (元素配置?.元素类型) {
+function 操作网页元素函数(目标元素参数, 元素配置参数) {
+    switch (元素配置参数?.元素类型) {
         case `按钮`:
             {
-                目标元素.click();
-                if (元素配置.选择器 != null) {
-                    记录日志函数(`🖱️ 点击，元素选择器：${元素配置.选择器}`, `日志`);
+                目标元素参数.click();
+                if (元素配置参数.选择器 != null) {
+                    记录日志函数(`🖱️ 点击，元素选择器：${元素配置参数.选择器}`, `日志`);
                 }
-                else if (元素配置.类名称 != null) {
-                    记录日志函数(`🖱️ 点击，元素类名称：${元素配置.类名称}`, `日志`);
+                else if (元素配置参数.类名称 != null) {
+                    记录日志函数(`🖱️ 点击，元素类名称：${元素配置参数.类名称}`, `日志`);
                 }
-                else if (元素配置.元素名称 != null) {
-                    记录日志函数(`🖱️ 点击，元素名称：${元素配置.元素名称}`, `日志`);
+                else if (元素配置参数.元素名称 != null) {
+                    记录日志函数(`🖱️ 点击，元素名称：${元素配置参数.元素名称}`, `日志`);
                 }
-                else if (元素配置.元素ID != null) {
-                    记录日志函数(`🖱️ 点击，元素ID：${元素配置.元素ID}`, `日志`);
+                else if (元素配置参数.元素ID != null) {
+                    记录日志函数(`🖱️ 点击，元素ID：${元素配置参数.元素ID}`, `日志`);
                 }
-                else if (元素配置.标签名称 != null) {
-                    记录日志函数(`🖱️ 点击，元素标签名称：${元素配置.标签名称}`, `日志`);
+                else if (元素配置参数.标签名称 != null) {
+                    记录日志函数(`🖱️ 点击，元素标签名称：${元素配置参数.标签名称}`, `日志`);
                 }
-                else if (元素配置.XPath != null) {
-                    记录日志函数(`🖱️ 点击，元素XPath：${元素配置.XPath}`, `日志`);
+                else if (元素配置参数.XPath != null) {
+                    记录日志函数(`🖱️ 点击，元素XPath：${元素配置参数.XPath}`, `日志`);
                 }
                 break;
             }
 
         case `树状图`:
             {
-                let 树节点元素 = 目标元素.closest(`li.treeview`);
+                let 树节点元素 = 目标元素参数.closest(`li.treeview`);
                 if (树节点元素) {
                     let 当前节点状态 = 树节点元素.classList.contains(`menu-open`);
-                    let 目标节点状态 = 元素配置.值 === `true`;
+                    let 目标节点状态 = 元素配置参数.值 === `true`;
                     if (当前节点状态 !== 目标节点状态) {
-                        目标元素.click();
-                        if (元素配置.选择器 != null) {
-                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素选择器：${元素配置.选择器}`, `日志`);
+                        目标元素参数.click();
+                        if (元素配置参数.选择器 != null) {
+                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素选择器：${元素配置参数.选择器}`, `日志`);
                         }
-                        else if (元素配置.类名称 != null) {
-                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素类名称：${元素配置.类名称}`, `日志`);
+                        else if (元素配置参数.类名称 != null) {
+                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素类名称：${元素配置参数.类名称}`, `日志`);
                         }
-                        else if (元素配置.元素名称 != null) {
-                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素名称：${元素配置.元素名称}`, `日志`);
+                        else if (元素配置参数.元素名称 != null) {
+                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素名称：${元素配置参数.元素名称}`, `日志`);
                         }
-                        else if (元素配置.元素ID != null) {
-                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素ID：${元素配置.元素ID}`, `日志`);
+                        else if (元素配置参数.元素ID != null) {
+                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素ID：${元素配置参数.元素ID}`, `日志`);
                         }
-                        else if (元素配置.标签名称 != null) {
-                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素标签名称：${元素配置.标签名称}`, `日志`);
+                        else if (元素配置参数.标签名称 != null) {
+                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素标签名称：${元素配置参数.标签名称}`, `日志`);
                         }
-                        else if (元素配置.XPath != null) {
-                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素XPath：${元素配置.XPath}`, `日志`);
+                        else if (元素配置参数.XPath != null) {
+                            记录日志函数(`🖱️ ${目标节点状态 ? `展开` : `折叠`}树节点，元素XPath：${元素配置参数.XPath}`, `日志`);
                         }
                     }
                 }
                 else {
-                    if (元素配置.选择器 != null) {
-                        记录日志函数(`❌ 树节点未找到，元素选择器：${元素配置.选择器}`, `报错`);
+                    if (元素配置参数.选择器 != null) {
+                        记录日志函数(`❌ 树节点未找到，元素选择器：${元素配置参数.选择器}`, `报错`);
                     }
-                    else if (元素配置.类名称 != null) {
-                        记录日志函数(`❌ 树节点未找到，元素类名称：${元素配置.类名称}`, `报错`);
+                    else if (元素配置参数.类名称 != null) {
+                        记录日志函数(`❌ 树节点未找到，元素类名称：${元素配置参数.类名称}`, `报错`);
                     }
-                    else if (元素配置.元素名称 != null) {
-                        记录日志函数(`❌ 树节点未找到，元素名称：${元素配置.元素名称}`, `报错`);
+                    else if (元素配置参数.元素名称 != null) {
+                        记录日志函数(`❌ 树节点未找到，元素名称：${元素配置参数.元素名称}`, `报错`);
                     }
-                    else if (元素配置.元素ID != null) {
-                        记录日志函数(`❌ 树节点未找到，元素ID：${元素配置.元素ID}`, `报错`);
+                    else if (元素配置参数.元素ID != null) {
+                        记录日志函数(`❌ 树节点未找到，元素ID：${元素配置参数.元素ID}`, `报错`);
                     }
-                    else if (元素配置.标签名称 != null) {
-                        记录日志函数(`❌ 树节点未找到，元素标签名称：${元素配置.标签名称}`, `报错`);
+                    else if (元素配置参数.标签名称 != null) {
+                        记录日志函数(`❌ 树节点未找到，元素标签名称：${元素配置参数.标签名称}`, `报错`);
                     }
-                    else if (元素配置.XPath != null) {
-                        记录日志函数(`❌ 树节点未找到，元素XPath：${元素配置.XPath}`, `报错`);
+                    else if (元素配置参数.XPath != null) {
+                        记录日志函数(`❌ 树节点未找到，元素XPath：${元素配置参数.XPath}`, `报错`);
                     }
                 }
                 break;
@@ -289,22 +289,22 @@ function 操作网页元素函数(目标元素, 元素配置) {
 
         case `文本框`:
             {
-                目标元素.focus();
-                if (元素配置?.是否粘贴) {
-                    目标元素.select();
-                    let 插入事件 = document.execCommand(`insertText`, false, 元素配置.值);
+                目标元素参数.focus();
+                if (元素配置参数?.是否粘贴) {
+                    目标元素参数.select();
+                    let 插入事件 = document.execCommand(`insertText`, false, 元素配置参数.值);
                     if (!插入事件) {
                         throw new Error(`粘贴失败`);
                     }
                 }
                 else {
-                    目标元素.value = 元素配置.值;
+                    目标元素参数.value = 元素配置参数.值;
                 }
                 let 输入事件 = new Event(`input`, { bubbles: true });
-                目标元素.dispatchEvent(输入事件);
+                目标元素参数.dispatchEvent(输入事件);
                 let 改变事件 = new Event(`change`, { bubbles: true });
-                目标元素.dispatchEvent(改变事件);
-                if (元素配置?.是否回车) {
+                目标元素参数.dispatchEvent(改变事件);
+                if (元素配置参数?.是否回车) {
                     let 回车事件 = new KeyboardEvent(`keydown`, {
                         key: `Enter`,
                         code: `Enter`,
@@ -312,25 +312,25 @@ function 操作网页元素函数(目标元素, 元素配置) {
                         bubbles: true,
                         cancelable: true,
                     });
-                    setTimeout(() => { 目标元素.dispatchEvent(回车事件); }, 50);
+                    setTimeout(() => { 目标元素参数.dispatchEvent(回车事件); }, 50);
                 }
-                if (元素配置.选择器 != null) {
-                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置.值}，元素选择器：${元素配置.选择器}`, `日志`);
+                if (元素配置参数.选择器 != null) {
+                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置参数.值}，元素选择器：${元素配置参数.选择器}`, `日志`);
                 }
-                else if (元素配置.类名称 != null) {
-                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置.值}，元素类名称：${元素配置.类名称}`, `日志`);
+                else if (元素配置参数.类名称 != null) {
+                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置参数.值}，元素类名称：${元素配置参数.类名称}`, `日志`);
                 }
-                else if (元素配置.元素名称 != null) {
-                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置.值}，元素名称：${元素配置.元素名称}`, `日志`);
+                else if (元素配置参数.元素名称 != null) {
+                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置参数.值}，元素名称：${元素配置参数.元素名称}`, `日志`);
                 }
-                else if (元素配置.元素ID != null) {
-                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置.值}，元素ID：${元素配置.元素ID}`, `日志`);
+                else if (元素配置参数.元素ID != null) {
+                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置参数.值}，元素ID：${元素配置参数.元素ID}`, `日志`);
                 }
-                else if (元素配置.标签名称 != null) {
-                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置.值}，元素标签名称：${元素配置.标签名称}`, `日志`);
+                else if (元素配置参数.标签名称 != null) {
+                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置参数.值}，元素标签名称：${元素配置参数.标签名称}`, `日志`);
                 }
-                else if (元素配置.XPath != null) {
-                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置.值}，元素XPath：${元素配置.XPath}`, `日志`);
+                else if (元素配置参数.XPath != null) {
+                    记录日志函数(`🖱️ 设置文本框值 = ${元素配置参数.值}，元素XPath：${元素配置参数.XPath}`, `日志`);
                 }
                 break;
             }
@@ -339,47 +339,47 @@ function 操作网页元素函数(目标元素, 元素配置) {
             {
                 // 分割多选值（支持逗号分隔）
                 let 值列表 = [];
-                if (元素配置?.分割符) {
-                    值列表 = 元素配置.值.split(元素配置.分割符).map(v => v.trim());
+                if (元素配置参数?.分割符) {
+                    值列表 = 元素配置参数.值.split(元素配置参数.分割符).map(v => v.trim());
                 }
                 else {
-                    值列表 = 元素配置.值.split(`,`).map(v => v.trim());
+                    值列表 = 元素配置参数.值.split(`,`).map(v => v.trim());
                 }
                 //标准下拉框
-                if (目标元素.tagName === `SELECT`) {
+                if (目标元素参数.tagName === `SELECT`) {
                     //多选
-                    if (目标元素.multiple) {
+                    if (目标元素参数.multiple) {
                         // 多选脚本：清除所有选项后按值列表选中
-                        Array.from(目标元素.options).forEach(option => { option.selected = 值列表.includes(option.value) || 值列表.includes(option.textContent.trim()); });
+                        Array.from(目标元素参数.options).forEach(option => { option.selected = 值列表.includes(option.value) || 值列表.includes(option.textContent.trim()); });
                     }
                     //单选
                     else {
                         // 单选脚本：取第一个有效值
-                        let 有效值 = 值列表.find(v => Array.from(目标元素.options).some(opt => opt.value === v || opt.textContent.trim() === v));
-                        if (有效值) 目标元素.value = 有效值;
+                        let 有效值 = 值列表.find(v => Array.from(目标元素参数.options).some(opt => opt.value === v || opt.textContent.trim() === v));
+                        if (有效值) 目标元素参数.value = 有效值;
                     }
                     let 改变事件 = new Event(`change`, { bubbles: true });
-                    目标元素.dispatchEvent(改变事件);
+                    目标元素参数.dispatchEvent(改变事件);
                 }
                 // 非标准下拉框
                 else {
-                    目标元素.click();
+                    目标元素参数.click();
                     setTimeout(() => {
                         值列表.forEach(值 => {
-                            if (元素配置?.是否选择器赋值) {
-                                if (元素配置.IframeID) {
-                                    let 选项元素 = 查找网页元素函数(目标元素, {
-                                        IframeID: 元素配置.IframeID,
-                                        是否模糊查询Iframe: 元素配置?.是否模糊查询Iframe,
+                            if (元素配置参数?.是否选择器赋值) {
+                                if (元素配置参数.IframeID) {
+                                    let 选项元素 = 查找网页元素函数(目标元素参数, {
+                                        IframeID: 元素配置参数.IframeID,
+                                        是否模糊查询Iframe: 元素配置参数?.是否模糊查询Iframe,
                                         选择器: 值,
                                     });
                                     if (选项元素) {
                                         setTimeout(() => { 选项元素.click(); }, 0);
                                     }
                                 }
-                                else if (元素配置.IframeSRC) {
-                                    let 选项元素 = 查找网页元素函数(目标元素, {
-                                        IframeSRC: 元素配置.IframeSRC,
+                                else if (元素配置参数.IframeSRC) {
+                                    let 选项元素 = 查找网页元素函数(目标元素参数, {
+                                        IframeSRC: 元素配置参数.IframeSRC,
                                         选择器: 值,
                                     });
                                     if (选项元素) {
@@ -387,7 +387,7 @@ function 操作网页元素函数(目标元素, 元素配置) {
                                     }
                                 }
                                 else {
-                                    let 选项元素 = 查找网页元素函数(目标元素, {
+                                    let 选项元素 = 查找网页元素函数(目标元素参数, {
                                         选择器: 值,
                                     });
                                     if (选项元素) {
@@ -404,10 +404,10 @@ function 操作网页元素函数(目标元素, 元素配置) {
                                     `:contains("${值}")`
                                 ];
                                 for (let 选择器 of 选择器列表) {
-                                    if (元素配置.IframeID) {
-                                        let 选项元素 = 查找网页元素函数(目标元素, {
-                                            IframeID: 元素配置.IframeID,
-                                            是否模糊查询Iframe: 元素配置?.是否模糊查询Iframe,
+                                    if (元素配置参数.IframeID) {
+                                        let 选项元素 = 查找网页元素函数(目标元素参数, {
+                                            IframeID: 元素配置参数.IframeID,
+                                            是否模糊查询Iframe: 元素配置参数?.是否模糊查询Iframe,
                                             选择器: 选择器,
                                         });
                                         if (选项元素) {
@@ -415,9 +415,9 @@ function 操作网页元素函数(目标元素, 元素配置) {
                                             break;
                                         }
                                     }
-                                    else if (元素配置.IframeSRC) {
-                                        let 选项元素 = 查找网页元素函数(目标元素, {
-                                            IframeSRC: 元素配置.IframeSRC,
+                                    else if (元素配置参数.IframeSRC) {
+                                        let 选项元素 = 查找网页元素函数(目标元素参数, {
+                                            IframeSRC: 元素配置参数.IframeSRC,
                                             选择器: 选择器,
                                         });
                                         if (选项元素) {
@@ -426,7 +426,7 @@ function 操作网页元素函数(目标元素, 元素配置) {
                                         }
                                     }
                                     else {
-                                        let 选项元素 = 查找网页元素函数(目标元素, {
+                                        let 选项元素 = 查找网页元素函数(目标元素参数, {
                                             选择器: 选择器,
                                         });
                                         if (选项元素) {
@@ -437,80 +437,80 @@ function 操作网页元素函数(目标元素, 元素配置) {
                                 }
                             }
                         });
-                        if (元素配置?.是否关闭下拉框) {
-                            setTimeout(() => { 目标元素.click(); }, 0);
+                        if (元素配置参数?.是否关闭下拉框) {
+                            setTimeout(() => { 目标元素参数.click(); }, 0);
                         }
                     }, 100);
                 }
-                if (元素配置.选择器 != null) {
-                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置.值}，元素选择器：${元素配置.选择器}`, `日志`);
+                if (元素配置参数.选择器 != null) {
+                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置参数.值}，元素选择器：${元素配置参数.选择器}`, `日志`);
                 }
-                else if (元素配置.类名称 != null) {
-                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置.值}，元素类名称：${元素配置.类名称}`, `日志`);
+                else if (元素配置参数.类名称 != null) {
+                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置参数.值}，元素类名称：${元素配置参数.类名称}`, `日志`);
                 }
-                else if (元素配置.元素名称 != null) {
-                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置.值}，元素名称：${元素配置.元素名称}`, `日志`);
+                else if (元素配置参数.元素名称 != null) {
+                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置参数.值}，元素名称：${元素配置参数.元素名称}`, `日志`);
                 }
-                else if (元素配置.元素ID != null) {
-                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置.值}，元素ID：${元素配置.元素ID}`, `日志`);
+                else if (元素配置参数.元素ID != null) {
+                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置参数.值}，元素ID：${元素配置参数.元素ID}`, `日志`);
                 }
-                else if (元素配置.标签名称 != null) {
-                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置.值}，元素标签名称：${元素配置.标签名称}`, `日志`);
+                else if (元素配置参数.标签名称 != null) {
+                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置参数.值}，元素标签名称：${元素配置参数.标签名称}`, `日志`);
                 }
-                else if (元素配置.XPath != null) {
-                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置.值}，元素XPath：${元素配置.XPath}`, `日志`);
+                else if (元素配置参数.XPath != null) {
+                    记录日志函数(`🖱️ 设置下拉框 = ${元素配置参数.值}，元素XPath：${元素配置参数.XPath}`, `日志`);
                 }
                 break;
             }
 
         case `下拉选项`:
             {
-                目标元素.selected = true;
+                目标元素参数.selected = true;
                 let 改变事件 = new Event(`change`, { bubbles: true });
-                目标元素.dispatchEvent(改变事件);
-                if (元素配置.选择器 != null) {
-                    记录日志函数(`🖱️ 选择下拉选项，元素选择器：${元素配置.选择器}`, `日志`);
+                目标元素参数.dispatchEvent(改变事件);
+                if (元素配置参数.选择器 != null) {
+                    记录日志函数(`🖱️ 选择下拉选项，元素选择器：${元素配置参数.选择器}`, `日志`);
                 }
-                else if (元素配置.类名称 != null) {
-                    记录日志函数(`🖱️ 选择下拉选项，元素类名称：${元素配置.类名称}`, `日志`);
+                else if (元素配置参数.类名称 != null) {
+                    记录日志函数(`🖱️ 选择下拉选项，元素类名称：${元素配置参数.类名称}`, `日志`);
                 }
-                else if (元素配置.元素名称 != null) {
-                    记录日志函数(`🖱️ 选择下拉选项，元素名称：${元素配置.元素名称}`, `日志`);
+                else if (元素配置参数.元素名称 != null) {
+                    记录日志函数(`🖱️ 选择下拉选项，元素名称：${元素配置参数.元素名称}`, `日志`);
                 }
-                else if (元素配置.元素ID != null) {
-                    记录日志函数(`🖱️ 选择下拉选项，元素ID：${元素配置.元素ID}`, `日志`);
+                else if (元素配置参数.元素ID != null) {
+                    记录日志函数(`🖱️ 选择下拉选项，元素ID：${元素配置参数.元素ID}`, `日志`);
                 }
-                else if (元素配置.标签名称 != null) {
-                    记录日志函数(`🖱️ 选择下拉选项，元素标签名称：${元素配置.标签名称}`, `日志`);
+                else if (元素配置参数.标签名称 != null) {
+                    记录日志函数(`🖱️ 选择下拉选项，元素标签名称：${元素配置参数.标签名称}`, `日志`);
                 }
-                else if (元素配置.XPath != null) {
-                    记录日志函数(`🖱️ 选择下拉选项，元素XPath：${元素配置.XPath}`, `日志`);
+                else if (元素配置参数.XPath != null) {
+                    记录日志函数(`🖱️ 选择下拉选项，元素XPath：${元素配置参数.XPath}`, `日志`);
                 }
                 break;
             }
 
         case `勾选框`:
             {
-                if ((目标元素.checked && 元素配置.值 != `true`) || (!目标元素.checked && 元素配置.值 == `true`)) {
-                    目标元素.click();
+                if ((目标元素参数.checked && 元素配置参数.值 != `true`) || (!目标元素参数.checked && 元素配置参数.值 == `true`)) {
+                    目标元素参数.click();
                 }
-                if (元素配置.选择器 != null) {
-                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置.值 === `true`}，元素选择器：${元素配置.选择器}`, `日志`);
+                if (元素配置参数.选择器 != null) {
+                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置参数.值 === `true`}，元素选择器：${元素配置参数.选择器}`, `日志`);
                 }
-                else if (元素配置.类名称 != null) {
-                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置.值 === `true`}，元素类名称：${元素配置.类名称}`, `日志`);
+                else if (元素配置参数.类名称 != null) {
+                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置参数.值 === `true`}，元素类名称：${元素配置参数.类名称}`, `日志`);
                 }
-                else if (元素配置.元素名称 != null) {
-                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置.值 === `true`}，元素名称：${元素配置.元素名称}`, `日志`);
+                else if (元素配置参数.元素名称 != null) {
+                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置参数.值 === `true`}，元素名称：${元素配置参数.元素名称}`, `日志`);
                 }
-                else if (元素配置.元素ID != null) {
-                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置.值 === `true`}，元素ID：${元素配置.元素ID}`, `日志`);
+                else if (元素配置参数.元素ID != null) {
+                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置参数.值 === `true`}，元素ID：${元素配置参数.元素ID}`, `日志`);
                 }
-                else if (元素配置.标签名称 != null) {
-                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置.值 === `true`}，元素标签名称：${元素配置.标签名称}`, `日志`);
+                else if (元素配置参数.标签名称 != null) {
+                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置参数.值 === `true`}，元素标签名称：${元素配置参数.标签名称}`, `日志`);
                 }
-                else if (元素配置.XPath != null) {
-                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置.值 === `true`}，元素XPath：${元素配置.XPath}`, `日志`);
+                else if (元素配置参数.XPath != null) {
+                    记录日志函数(`🖱️ 设置勾选框 = ${元素配置参数.值 === `true`}，元素XPath：${元素配置参数.XPath}`, `日志`);
                 }
                 break;
             }
@@ -855,81 +855,80 @@ function 执行步骤操作函数() {
     }
 }
 
-function 修改当前步骤ID函数(修改后步骤ID, 等待时间) {
-    当前步骤ID = 修改后步骤ID;
+function 修改当前步骤ID函数(步骤ID参数, 等待时间参数) {
+    当前步骤ID = 步骤ID参数;
     GM_setValue(`当前步骤ID`, 当前步骤ID);
     是否重新执行操作 = true;
     GM_setValue(`是否重新执行操作`, 是否重新执行操作);
     是否结束等待执行操作 = false;
     GM_setValue(`是否结束等待执行操作`, 是否结束等待执行操作);
-    重新执行操作等待时间 = 等待时间;
+    重新执行操作等待时间 = 等待时间参数;
 }
 
-function 检索唯一字符串函数(原字符串, 左字符串, 右字符串) {
-    let 字符串起点 = 原字符串.indexOf(左字符串) + 左字符串.length;
-    if (字符串起点 < 左字符串.length) return ``;
+function 检索唯一字符串函数(原字符串参数, 左字符串参数, 右字符串参数) {
+    let 字符串起点 = 原字符串参数.indexOf(左字符串参数) + 左字符串参数.length;
+    if (字符串起点 < 左字符串参数.length) return ``;
 
-    let 字符串终点 = 原字符串.indexOf(右字符串, 字符串起点);
+    let 字符串终点 = 原字符串参数.indexOf(右字符串参数, 字符串起点);
     if (字符串终点 === -1) return ``;
 
-    return 原字符串.slice(字符串起点, 字符串终点);
+    return 原字符串参数.slice(字符串起点, 字符串终点);
 }
 
-function 检索全部字符串函数(原字符串, 左字符串, 右字符串) {
+function 检索全部字符串函数(原字符串参数, 左字符串参数, 右字符串参数) {
     let 字符串数组 = [];
     let 当前字符串起点 = 0;
 
-    while (当前字符串起点 < 原字符串.length) {
-        let 左字符串起点 = 原字符串.indexOf(左字符串, 当前字符串起点);
+    while (当前字符串起点 < 原字符串参数.length) {
+        let 左字符串起点 = 原字符串参数.indexOf(左字符串参数, 当前字符串起点);
         if (左字符串起点 === -1) break;
 
-        let 字符串起点 = 左字符串起点 + 左字符串.length;
+        let 字符串起点 = 左字符串起点 + 左字符串参数.length;
 
-        let 字符串终点 = 原字符串.indexOf(右字符串, 字符串起点);
+        let 字符串终点 = 原字符串参数.indexOf(右字符串参数, 字符串起点);
         if (字符串终点 === -1) break;
 
-        let 字符串内容 = 原字符串.slice(字符串起点, 字符串终点);
+        let 字符串内容 = 原字符串参数.slice(字符串起点, 字符串终点);
         字符串数组.push(字符串内容);
 
-        当前字符串起点 = 字符串终点 + 右字符串.length;
+        当前字符串起点 = 字符串终点 + 右字符串参数.length;
     }
 
     return 字符串数组;
 }
 
-function 导入数据数组函数(数组对象, 文本数据) {
-    Object.keys(数组对象).forEach(数组名称 => {
-        数组对象[数组名称].length = 0;
+function 导入数据数组函数(数组对象参数, 文本数据参数) {
+    Object.keys(数组对象参数).forEach(数组名称 => {
+        数组对象参数[数组名称].length = 0;
     });
-    let 行数组 = 文本数据.split(`\n`);
+    let 行数组 = 文本数据参数.split(`\n`);
     行数组.forEach(行 => {
-        // 分割每行的数据（按制表符或空格分割）
         let 数据数组 = 行.split(`\t`);
 
-        if (行.split(`\t`).length == Object.keys(数组对象).length) {
+        if (行.split(`\t`).length == Object.keys(数组对象参数).length) {
             let 数据索引 = 0;
-            Object.keys(数组对象).forEach(数组名称 => {
-                数组对象[数组名称].push(数据数组[数据索引].trim());
+            Object.keys(数组对象参数).forEach(数组名称 => {
+                数组对象参数[数组名称].push(数据数组[数据索引].trim());
                 数据索引++;
             });
             //记录日志函数(`✅ 成功导入：\n${数据数组.slice(0, 数据数组.length).join(`\n`)}`, `日志`);
         }
         else {
             let 数据索引 = 0;
-            Object.keys(数组对象).forEach(数组名称 => {
+            Object.keys(数组对象参数).forEach(数组名称 => {
                 if (数据索引 < 数据数组.length) {
-                    数组对象[数组名称].push(数据数组[数据索引].trim());
+                    数组对象参数[数组名称].push(数据数组[数据索引].trim());
                     数据索引++;
                 }
                 else {
-                    数组对象[数组名称].push(``);
+                    数组对象参数[数组名称].push(``);
                 }
             });
             //记录日志函数(`✅ 成功导入：\n${数据数组.slice(0, 数据数组.length).join(`\n`)}`, `告警`);
         }
     });
-    记录日志函数(`✅ 成功导入 ${Object.values(数组对象)[0].length} 条数据`, `日志`);
-    脚本循环次数 = Object.values(数组对象)[0].length;
+    记录日志函数(`✅ 成功导入 ${Object.values(数组对象参数)[0].length} 条数据`, `日志`);
+    脚本循环次数 = Object.values(数组对象参数)[0].length;
     GM_setValue(`脚本循环次数`, 脚本循环次数);
 }
 
@@ -1483,32 +1482,32 @@ function 停止流程函数() {
     更新菜单函数();
 }
 
-function 格式化时间函数(需格式化时间)//将时间格式化为YYYY-MM-DD字符串
+function 格式化时间函数(时间参数)//将时间格式化为YYYY-MM-DD字符串
 {
-    需格式化时间 = String(需格式化时间);
-    if (需格式化时间.includes(`年`) || 需格式化时间.includes(`月`) || 需格式化时间.includes(`日`)) {
-        需格式化时间 = 需格式化时间.replaceAll(`年`, `/`).replaceAll(`月`, `/`).replaceAll(`日`, `/`);
+    时间参数 = String(时间参数);
+    if (时间参数.includes(`年`) || 时间参数.includes(`月`) || 时间参数.includes(`日`)) {
+        时间参数 = 时间参数.replaceAll(`年`, `/`).replaceAll(`月`, `/`).replaceAll(`日`, `/`);
     }
-    let 标准时间 = new Date(需格式化时间);
-    const 年 = 标准时间.getFullYear();
-    const 月 = (标准时间.getMonth() + 1).toString().padStart(2, `0`);
-    const 日 = 标准时间.getDate().toString().padStart(2, `0`);
+    let 标准时间 = new Date(时间参数);
+    let 年 = 标准时间.getFullYear();
+    let 月 = (标准时间.getMonth() + 1).toString().padStart(2, `0`);
+    let 日 = 标准时间.getDate().toString().padStart(2, `0`);
     return `${年}-${月}-${日}`;
 }
 
-function 记录日志函数(日志文本, 日志类型) {
-    if (日志类型 == `日志`) {
-        console.log(日志文本, new Date().toLocaleTimeString());
+function 记录日志函数(文本参数, 类型参数) {
+    if (类型参数 == `日志`) {
+        console.log(文本参数, new Date().toLocaleTimeString());
     }
-    else if (日志类型 == `告警`) {
-        console.warn(日志文本, new Date().toLocaleTimeString());
+    else if (类型参数 == `告警`) {
+        console.warn(文本参数, new Date().toLocaleTimeString());
     }
-    else if (日志类型 == `报错`) {
-        console.error(日志文本, new Date().toLocaleTimeString());
-        报错记录数组.push(`${报错记录数组.length} ${日志文本} ${new Date().toLocaleTimeString()}`);
+    else if (类型参数 == `报错`) {
+        console.error(文本参数, new Date().toLocaleTimeString());
+        报错记录数组.push(`${报错记录数组.length} ${文本参数} ${new Date().toLocaleTimeString()}`);
         GM_setValue(`报错记录数组`, 报错记录数组);
     }
-    日志记录数组.push(`${日志记录数组.length} ${日志文本} ${new Date().toLocaleTimeString()}`);
+    日志记录数组.push(`${日志记录数组.length} ${文本参数} ${new Date().toLocaleTimeString()}`);
     GM_setValue(`日志记录数组`, 日志记录数组);
 }
 
