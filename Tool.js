@@ -1495,6 +1495,67 @@ function 格式化时间函数(时间参数)//将时间格式化为YYYY-MM-DD字
     return `${年}-${月}-${日}`;
 }
 
+function 转换时间函数(时间参数, 基准时间 = new Date()) {
+    let 当前时间 = 基准时间;
+    let 年 = 当前时间.getFullYear();
+    let 月 = 当前时间.getMonth() + 1;
+    let 日 = 当前时间.getDate();
+
+    // 1. 处理“X小时前”
+    let 匹配X小时前 = 时间参数.match(/^(\d+)\s*小时前$/);
+    if (匹配X小时前) {
+        let 小时 = parseInt(匹配X小时前[1]);
+        let 标准时间 = new Date(当前时间.getTime() - 小时 * 3600000);
+        return 格式化时间函数(标准时间);
+    }
+
+    // 2. 处理“昨天HH:MM”
+    if (时间参数.startsWith('昨天')) {
+        let targetDate = new Date(当前时间.getTime() - 24 * 3600000);
+        return 格式化时间函数(targetDate);
+    }
+
+    // 3. 处理“前天HH:MM”
+    if (时间参数.startsWith('前天')) {
+        let 标准时间 = new Date(当前时间.getTime() - 48 * 3600000);
+        return 格式化时间函数(标准时间);
+    }
+
+    // 4. 处理“X天前”
+    let 匹配X天前 = 时间参数.match(/^(\d+)\s*天前$/);
+    if (匹配X天前) {
+        let days = parseInt(匹配X天前[1]);
+        let 标准时间 = new Date(当前时间.getTime() - days * 24 * 3600000);
+        return 格式化时间函数(标准时间);
+    }
+
+    // 5. 处理“MM月DD日”（默认为当前年份）
+    let 匹配月日 = 时间参数.match(/^(\d{1,2})\s*月\s*(\d{1,2})\s*日$/);
+    if (匹配月日) {
+        let 目标月 = parseInt(匹配月日[1]);
+        let 目标日 = parseInt(匹配月日[2]);
+        // 如果月份大于当前月份，则认为是去年
+        let 目标年份 = (目标月 > 月) ? 年 - 1 : 年;
+        return `${目标年份}-${目标月.toString().padStart(2, '0')}-${目标日.toString().padStart(2, '0')}`;
+    }
+
+    // 6. 处理“YYYY年MM月DD日”
+    let 匹配年月日 = 时间参数.match(/^(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日$/);
+    if (匹配年月日) {
+        let 目标年 = parseInt(匹配年月日[1]);
+        let 目标月 = parseInt(匹配年月日[2]);
+        let 目标日 = parseInt(匹配年月日[3]);
+        return `${目标年}-${目标月.toString().padStart(2, '0')}-${目标日.toString().padStart(2, '0')}`;
+    }
+
+    // 7. 处理“YYYY-MM-DD”格式（直接返回）
+    let 匹配标准格式 = 时间参数.match(/^\d{4}-\d{2}-\d{2}$/);
+    if (匹配标准格式) return 时间参数;
+
+    //无法识别的格式返回原字符串
+    return 时间参数;
+}
+
 function 记录日志函数(文本参数, 类型参数) {
     if (类型参数 == `日志`) {
         console.log(文本参数, new Date().toLocaleTimeString());
