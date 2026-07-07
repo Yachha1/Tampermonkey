@@ -229,7 +229,7 @@ function 查找所有Iframe函数(目标文档参数) {
     }
 
     递归查找所有Iframe函数(目标文档参数);
-    
+
     return 所有Iframe数组;
 }
 
