@@ -213,8 +213,6 @@ function 递归搜索Iframe函数(目标文档参数, 元素配置参数) {
 function 查找所有Iframe函数(目标文档参数) {
     let 所有Iframe数组 = [];
 
-    递归查找所有Iframe函数(目标文档参数);
-    
     function 递归查找所有Iframe函数(目标文档参数)
     {
         let Iframe数组 = 目标文档参数.querySelectorAll(`iframe`);
@@ -230,6 +228,8 @@ function 查找所有Iframe函数(目标文档参数) {
         }
     }
 
+    递归查找所有Iframe函数(目标文档参数);
+    
     return 所有Iframe数组;
 }
 
