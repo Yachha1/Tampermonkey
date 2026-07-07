@@ -210,6 +210,29 @@ function 递归搜索Iframe函数(目标文档参数, 元素配置参数) {
     return null;
 }
 
+function 查找所有Iframe函数(目标文档参数) {
+    let 所有Iframe数组 = [];
+
+    递归查找所有Iframe函数(目标文档参数);
+    
+    function 递归查找所有Iframe函数(目标文档参数)
+    {
+        let Iframe数组 = 目标文档参数.querySelectorAll(`iframe`);
+        Iframe数组.forEach(iframe => 所有Iframe数组.push(iframe));
+        for (let iframe of Iframe数组) {
+            try {
+                let 目标文档 = iframe.contentDocument || iframe.contentWindow.document;
+                递归查找所有Iframe函数(目标文档)
+            }
+            catch (e) {
+                记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
+            }
+        }
+    }
+
+    return 所有Iframe数组;
+}
+
 function 操作网页元素函数(目标元素参数, 元素配置参数) {
     switch (元素配置参数?.元素类型) {
         case `按钮`:
