@@ -1058,10 +1058,10 @@ function 更新菜单函数() {
                     margin-bottom: 15px;
                 }
                 #查看数据下拉框 {
-                    padding: 12px 15px; /* 增加内边距 */
+                    padding: 12px 15px; /* 设置内边距 */
                     border: 1px solid #ccc;
                     border-radius: 6px;
-                    font-size: 20px; /* 增大字体大小 */
+                    font-size: 20px; /* 设置字体大小 */
                     width: 100%; /* 改为100%宽度与文本区域一致 */
                     height: auto;
                     background-color: #f9f9f9;
@@ -1105,7 +1105,7 @@ function 更新菜单函数() {
                     background: white;
                     cursor: pointer;
                     transition: all 0.2s;
-                    font-size: 14px; /* 调整按钮字体大小 */
+                    font-size: 14px; /* 设置按钮字体大小 */
                 }
                 .按钮区域 button:hover {
                     background-color: #f0f0f0;
@@ -1191,9 +1191,9 @@ function 更新菜单函数() {
                 }
                 .按钮区域 {
                     display: flex; /* 弹性布局 */
-                    gap: 10px; /* 按钮间距 */
-                    padding: 10px 0 0; /* 内边距 */
-                    border-top: 1px solid #ddd; /* 上边框 */
+                    gap: 10px; /* 设置按钮间距 */
+                    padding: 10px 0 0; /* 设置内边距 */
+                    border-top: 1px solid #ddd; /* 设置上边框 */
                 }
                 .按钮区域 button {
                     border: 1px solid #ccc;
@@ -1324,8 +1324,8 @@ function 更新菜单函数() {
                 }
                 .按钮区域 {
                     display: flex; /* 弹性布局 */
-                    gap: 10px; /* 按钮间距 */
-                    padding: 10px 0 0; /* 内边距 */
+                    gap: 10px; /* 设置按钮间距 */
+                    padding: 10px 0 0; /* 设置内边距 */
                     border-top: 1px solid #ddd; /* 上边框 */
                 }
                 .按钮区域 button {
