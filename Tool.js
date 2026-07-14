@@ -1081,8 +1081,8 @@ function 更新菜单函数() {
                     border: 1px solid #ddd;
                     border-radius: 4px;
                     font-family: monospace;
-                    font-size: 15px; /* 增大字体大小 */
-                    line-height: 1.5; /* 增加行高提高可读性 */
+                    font-size: 15px; /* 设置字体大小 */
+                    line-height: 1.5; /* 设置行高 */
                 }
                 .按钮区域 {
                     display: flex;
@@ -1186,6 +1186,8 @@ function 更新菜单函数() {
                     height: 100%;
                     box-sizing: border-box;
                     resize: none; /* 禁止用户拖拽调整 */
+                    font-size: 14px; /* 设置字体大小 */
+                    line-height: 1.5; /* 设置行高 */
                 }
                 .按钮区域 {
                     display: flex; /* 弹性布局 */
@@ -1317,6 +1319,8 @@ function 更新菜单函数() {
                     height: 100%;
                     box-sizing: border-box;
                     resize: none; /* 禁止用户拖拽调整 */
+                    font-size: 14px; /* 设置字体大小 */
+                    line-height: 1.5; /* 设置行高 */
                 }
                 .按钮区域 {
                     display: flex; /* 弹性布局 */
