@@ -1008,43 +1008,178 @@ function 更新菜单函数() {
     });
 
     自定义菜单函数();
-    let 菜单提示文本 = 是否开启实时执行定时器 ? `✅` : `❌`;
-    菜单ID数组.push(GM_registerMenuCommand(`${菜单提示文本}【实时执行定时器】`, () => {
-        是否开启实时执行定时器 = !是否开启实时执行定时器;
-        GM_setValue(`是否开启实时执行定时器`, 是否开启实时执行定时器);
-        更新菜单函数();
-    }));
-    菜单ID数组.push(GM_registerMenuCommand(`▶️ 设置线程数【当前：${总线程数}】`, () => {
-        let 导入数据 = prompt(`设置线程数【当前：${总线程数}】`, ``);
-        if (导入数据 && Number(导入数据)) {
-            总线程数 = Number(导入数据);
+    菜单ID数组.push(GM_registerMenuCommand(`▶️ 修改设置`, () => {
+        let 文本 = ``;
+        let 日志弹窗 = document.createElement(`div`);
+        日志弹窗.innerHTML = `
+            <style>
+                .遮罩 {
+                    position: fixed; /* 固定定位，相对于视口 */
+                    top: 0; /* 顶部对齐 */
+                    left: 0; /* 左侧对齐 */
+                    width: 100%; /* 设置宽度占比 */
+                    height: 100%; /* 设置高度占比 */
+                    background: rgba(0,0,0,0.1); /* 设置背景颜色，半透明黑色背景 */
+                    z-index: 9998; /* 层级低于主容器但高于页面内容 */
+                }
+                .日志容器 {
+                    position: fixed; /* 固定定位 */
+                    top: 20%; left: 20%; /* 距离顶部和左侧各20% */
+                    width: 60%; height: 60%; /* 宽高各占60%视口 */
+                    z-index: 9999; /* 最高层级，确保显示在最前 */
+                    background: white; /* 设置背景颜色 */
+                    border: 2px solid #333; /* 深灰色边框 */
+                    padding: 10px; /* 内边距10px */
+                    box-shadow: 0 0 20px #000; /* 黑色阴影效果 */
+                    display: flex; /* 启用Flex布局 */
+                    flex-direction: column; /* 垂直排列子元素 */
+                }
+                .标题 {
+                    padding-bottom: 10px; /* 底部内边距，与下方内容分隔 */
+                    border-bottom: 1px solid #eee; /* 浅灰色底部分隔线 */
+                }
+                .滚动区域 {
+                    flex: 1; /* 占据父容器剩余所有空间 */
+                    min-height: 50px; /* 最小高度限制 */
+                    overflow: hidden; /* 隐藏滚动条 */
+                    display: flex; /* 启用Flex布局使两个textarea并排 */
+                }
+                .日志区域 {
+                    width: 100%; /* 每个占100%宽度 */
+                    height: 100%; /* 高度填满父容器 */
+                    box-sizing: border-box; /* 盒模型包含边框和内边距 */
+                    resize: none; /* 禁止用户手动调整大小 */
+                    font-size: 14px; /* 设置字体大小 */
+                    line-height: 1.5; /* 设置行高 */
+                }
+                .按钮区域 {
+                    display: flex; /* 弹性布局 */
+                    gap: 10px; /* 按钮间距 */
+                    padding: 10px 0 0; /* 内边距 */
+                    border-top: 1px solid #ddd; /* 上边框 */
+                }
+                .按钮区域 button {
+                    border: 1px solid #ccc; /* 浅灰色边框 */
+                    padding: 6px 12px; /* 内边距 */
+                    border-radius: 4px; /* 圆角边框 */
+                    background: white; /* 白色背景 */
+                    cursor: pointer; /* 鼠标手型指针 */
+                    transition: all 0.2s; /* 所有属性变化过渡0.2秒 */
+                }
+                /* 按钮悬停效果 */
+                .按钮区域 button:hover {
+                    border-color: #007bff; /* 边框变蓝色 */
+                }
+                /* 按钮点击效果 */
+                .按钮区域 button:active {
+                    background-color: #f0f0f0; /* 点击时背景变浅灰 */
+                }
+            </style>
+            <div class="遮罩" id="遮罩"></div>
+            <div class="日志容器" id="日志容器">
+                <div class="标题">
+                    <h3>设置【批量勾选/取消勾选】</h3>
+                </div>
+                <div class="滚动区域">
+                    <textarea class="日志区域" readonly>${文本}</textarea>
+                </div>
+                <div class="按钮区域">
+                    <button id="是否开启实时执行定时器按钮">是否开启实时执行定时器</button>
+                    <button id="设置总线程数按钮">设置总线程数</button>
+                    <button id="设置实时执行定时器间隔时间按钮">设置实时执行定时器间隔时间</button>
+                    <button id="复制按钮">复制</button>
+                    <button id="关闭按钮">关闭</button>
+                </div>
+            </div>
+            `;
+        刷新UI函数();
+        document.body.appendChild(日志弹窗);
+        日志弹窗.querySelector(`#遮罩`).addEventListener(`click`, () => {
+            日志弹窗.remove();
+        });
+        日志弹窗.querySelector(`#日志容器`).addEventListener(`click`, (e) => {
+            e.stopPropagation();
+        });
+        日志弹窗.querySelector(`#是否开启实时执行定时器按钮`).addEventListener(`click`, () => {
+            let 是否开启 = confirm(`设置【是否开启实时执行定时器】`, ``);
+            是否开启实时执行定时器 = 是否开启;
+            GM_setValue(`是否开启实时执行定时器`, 是否开启实时执行定时器);
+            记录日志函数(`✅ 设置【是否开启实时执行定时器】：${是否开启实时执行定时器}`, `日志`);
+            if (是否开启实时执行定时器) {
+                clearInterval(实时执行定时器);
+                实时执行定时器 = setInterval(实时判定执行函数, 实时执行定时器间隔时间 * 1000);
+                GM_setValue(`实时执行定时器`, 实时执行定时器);
+                记录日志函数(`⏱ 已启动实时执行定时器，${实时执行定时器间隔时间}秒/次`, `日志`);
+            }
+            else
+            {
+                clearInterval(实时执行定时器);
+                实时执行定时器 = null;
+                GM_setValue(`实时执行定时器`, 实时执行定时器);
+                记录日志函数(`⏱ 已停止实时执行定时器，${实时执行定时器间隔时间}秒/次`, `日志`);
+            }
+            刷新UI函数();
+        });
+        日志弹窗.querySelector(`#设置总线程数按钮`).addEventListener(`click`, () => {
+            let 输入数据 = prompt(`设置【总线程数】`, ``);
+            if(!输入数据)
+            {
+                记录日志函数(`⚠️ 取消设置【总线程数】`, `告警`);
+                return;
+            }
+            输入数据 = parseInt(输入数据, 10);
+            if (isNaN(输入数据) && 输入数据 >= 0) {
+                记录日志函数(`⚠️ 取消设置【总线程数】`, `告警`);
+                return;
+            }
+
+            总线程数 = 输入数据;
             GM_setValue(`总线程数`, 总线程数);
-            记录日志函数(`✅ 总线程数设置为：${总线程数}`, `日志`);
-        }
-        else {
-            记录日志函数(`⚠️ 取消设置线程数`, `告警`);
-            return;
-        }
-        更新菜单函数();
-    }));
-    菜单ID数组.push(GM_registerMenuCommand(`▶️ 设置实时执行定时器间隔时间【当前：${实时执行定时器间隔时间}】`, () => {
-        let 导入数据 = prompt(`设置实时执行定时器间隔时间【当前：${实时执行定时器间隔时间}】`, ``);
-        if (导入数据 && Number(导入数据) && Number(导入数据) > 0) {
-            实时执行定时器间隔时间 = Number(导入数据);
+            记录日志函数(`✅ 设置【总线程数】为：${总线程数}`, `日志`);
+            刷新UI函数();
+        });
+        日志弹窗.querySelector(`#设置实时执行定时器间隔时间按钮`).addEventListener(`click`, () => {
+            let 输入数据 = prompt(`设置【实时执行定时器间隔时间】`, ``);
+            if(!输入数据)
+            {
+                记录日志函数(`⚠️ 取消设置【实时执行定时器间隔时间】`, `告警`);
+                return;
+            }
+            输入数据 = parseInt(输入数据, 10);
+            if (isNaN(输入数据) && 输入数据 >= 0) {
+                记录日志函数(`⚠️ 取消设置【实时执行定时器间隔时间】`, `告警`);
+                return;
+            }
+
+            实时执行定时器间隔时间 = 输入数据;
             GM_setValue(`实时执行定时器间隔时间`, 实时执行定时器间隔时间);
-            记录日志函数(`✅ 实时执行定时器间隔时间设置为：${实时执行定时器间隔时间}`, `日志`);
+            记录日志函数(`✅ 设置【实时执行定时器间隔时间】为：${实时执行定时器间隔时间}`, `日志`);
+            if (是否开启实时执行定时器) {
+                clearInterval(实时执行定时器);
+                实时执行定时器 = setInterval(实时判定执行函数, 实时执行定时器间隔时间 * 1000);
+                GM_setValue(`实时执行定时器`, 实时执行定时器);
+                记录日志函数(`⏱ 已启动实时执行定时器，${实时执行定时器间隔时间}秒/次`, `日志`);
+            }
+            刷新UI函数();
+        });
+        日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
+            GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
+        });
+        日志弹窗.querySelector(`#关闭按钮`).addEventListener(`click`, () => {
+            日志弹窗.remove();
+        });
+
+        function 刷新UI函数() {
+            文本 = `是否开启实时执行定时器：\n` + 是否开启实时执行定时器 + `\n\n总线程数：\n` + 总线程数 + `\n\n实时执行定时器间隔时间：\n` + 实时执行定时器间隔时间 + `\n`;
+            日志弹窗.querySelector(`textarea`).value = 文本;
         }
-        else {
-            记录日志函数(`⚠️ 取消设置实时执行定时器间隔时间`, `告警`);
-            return;
-        }
-        更新菜单函数();
     }));
     菜单ID数组.push(GM_registerMenuCommand(`🔍 查看数据`, () => {
         let 当前数据选项 = Object.keys(数据选项对象)[0];
+        let 当前数据数组 = [];
 
         function 刷新文本区域函数() {
-            let 当前数据数组 = [];
+            当前数据数组 = [];
             Object.keys(数据选项对象).forEach(数组名称 => {
                 if (当前数据选项 == 数组名称) {
                     当前数据数组 = 数据选项对象[数组名称];
@@ -1153,6 +1288,12 @@ function 更新菜单函数() {
                 </div>
                 <div class="按钮区域">
                     <span class="数据条数" id="数据条数"></span>
+                    <button id="显示全部按钮">显示全部</button>
+                    <button id="仅显示✅按钮">仅显示✅</button>
+                    <button id="仅显示🖱️按钮">仅显示🖱️</button>
+                    <button id="仅显示❌按钮">仅显示❌</button>
+                    <button id="仅显示⚠️按钮">仅显示⚠️</button>
+                    <button id="清空按钮">清空</button>
                     <button id="复制按钮">复制</button>
                     <button id="关闭按钮">关闭</button>
                 </div>
@@ -1167,249 +1308,56 @@ function 更新菜单函数() {
         });
         日志弹窗.querySelector(`#遮罩`).addEventListener(`click`, () => 日志弹窗.remove());
         日志弹窗.querySelector(`#日志容器`).addEventListener(`click`, (e) => e.stopPropagation());
+        日志弹窗.querySelector(`#显示全部按钮`).addEventListener(`click`, () => {
+            日志弹窗.querySelector(`textarea`).value = 当前数据数组.join(`\n`);
+        });
+        日志弹窗.querySelector(`#仅显示✅按钮`).addEventListener(`click`, () => {
+            let 文本 = ``;
+            for (let i = 0; i < 当前数据数组.length; i++) {
+                if (当前数据数组[i].includes(`✅`)) {
+                    文本 += 当前数据数组[i] + `\n`;
+                }
+            }
+            日志弹窗.querySelector(`textarea`).value = 文本;
+        });
+        日志弹窗.querySelector(`#仅显示🖱️按钮`).addEventListener(`click`, () => {
+            let 文本 = ``;
+            for (let i = 0; i < 当前数据数组.length; i++) {
+                if (当前数据数组[i].includes(`🖱️`)) {
+                    文本 += 当前数据数组[i] + `\n`;
+                }
+            }
+            日志弹窗.querySelector(`textarea`).value = 文本;
+        });
+        日志弹窗.querySelector(`#仅显示❌按钮`).addEventListener(`click`, () => {
+            let 文本 = ``;
+            for (let i = 0; i < 当前数据数组.length; i++) {
+                if (当前数据数组[i].includes(`❌`)) {
+                    文本 += 当前数据数组[i] + `\n`;
+                }
+            }
+            日志弹窗.querySelector(`textarea`).value = 文本;
+        });
+        日志弹窗.querySelector(`#仅显示⚠️按钮`).addEventListener(`click`, () => {
+            let 文本 = ``;
+            for (let i = 0; i < 当前数据数组.length; i++) {
+                if (当前数据数组[i].includes(`⚠️`)) {
+                    文本 += 当前数据数组[i] + `\n`;
+                }
+            }
+            日志弹窗.querySelector(`textarea`).value = 文本;
+        });
+        日志弹窗.querySelector(`#清空按钮`).addEventListener(`click`, () => {
+            当前数据数组.length = 0;
+            GM_setValue(当前数据选项, 当前数据数组);
+            日志弹窗.querySelector(`textarea`).value = ``;
+        });
         日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
             GM_setClipboard(日志弹窗.querySelector(`#文本区域`).value);
-            记录日志函数(`✅ 已复制到剪切板`, `日志`);
-
             let 复制按钮 = 日志弹窗.querySelector(`#复制按钮`);
             let 原文本 = 复制按钮.textContent;
             复制按钮.textContent = `已复制`;
             setTimeout(() => { 复制按钮.textContent = 原文本; }, 1000);
-        });
-        日志弹窗.querySelector(`#关闭按钮`).addEventListener(`click`, () => 日志弹窗.remove());
-    }));
-    菜单ID数组.push(GM_registerMenuCommand(`📜 查看日志记录`, () => {
-        let 日志弹窗 = document.createElement(`div`);
-        日志弹窗.innerHTML = `
-            <style>
-                .遮罩 {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.1);
-                    z-index: 9998;
-                }
-                .日志容器 {
-                    position: fixed;
-                    top: 20%; left: 20%;
-                    width: 60%; height: 60%;
-                    z-index: 9999;
-                    background: white;
-                    border: 2px solid #333;
-                    padding: 10px;
-                    box-shadow: 0 0 20px #000;
-                    display: flex;
-                    flex-direction: column;
-                }
-                .标题 {
-                    padding-bottom: 10px;
-                    border-bottom: 1px solid #eee;
-                }
-                .滚动区域 {
-                    flex: 1; /* 占据剩余空间 */
-                    min-height: 50px;
-                    overflow: hidden; /* 隐藏滚动条 */
-                }
-                .日志区域 {
-                    width: 100%;
-                    height: 100%;
-                    box-sizing: border-box;
-                    resize: none; /* 禁止用户拖拽调整 */
-                    font-size: 14px; /* 设置字体大小 */
-                    line-height: 1.5; /* 设置行高 */
-                }
-                .按钮区域 {
-                    display: flex; /* 弹性布局 */
-                    gap: 10px; /* 设置按钮间距 */
-                    padding: 10px 0 0; /* 设置内边距 */
-                    border-top: 1px solid #ddd; /* 设置上边框 */
-                }
-                .按钮区域 button {
-                    border: 1px solid #ccc;
-                    padding: 6px 12px;
-                    border-radius: 4px;
-                    background: white;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                }
-                .按钮区域 button:hover {
-                    border-color: #007bff;
-                }
-                .按钮区域 button:active {
-                    background-color: #f0f0f0;
-                }
-            </style>
-            <div class="遮罩" id="遮罩"></div>
-            <div class="日志容器" id="日志容器">
-                <div class="标题">
-                    <h3>日志记录数组（共${日志记录数组.length}条）</h3>
-                </div>
-                <div class="滚动区域">
-                    <textarea class="日志区域" readonly>${日志记录数组.join(`\n`)}</textarea>
-                </div>
-                <div class="按钮区域">
-                    <button id="显示全部按钮">显示全部</button>
-                    <button id="仅显示✅按钮">仅显示✅</button>
-                    <button id="仅显示🖱️按钮">仅显示🖱️</button>
-                    <button id="仅显示❌按钮">仅显示❌</button>
-                    <button id="仅显示⚠️按钮">仅显示⚠️</button>
-                    <button id="清空按钮">清空</button>
-                    <button id="复制按钮">复制</button>
-                    <button id="关闭按钮">关闭</button>
-                </div>
-            </div>
-            `;
-        document.body.appendChild(日志弹窗);
-        日志弹窗.querySelector(`#遮罩`).addEventListener(`click`, () => 日志弹窗.remove());
-        日志弹窗.querySelector(`#日志容器`).addEventListener(`click`, (e) => e.stopPropagation());
-        日志弹窗.querySelector(`#显示全部按钮`).addEventListener(`click`, () => {
-            日志弹窗.querySelector(`textarea`).value = 日志记录数组.join(`\n`);
-            记录日志函数(`✅ 显示全部日志`, `日志`);
-        });
-        日志弹窗.querySelector(`#仅显示✅按钮`).addEventListener(`click`, () => {
-            let 文本 = ``;
-            for (let i = 0; i < 日志记录数组.length; i++) {
-                if (日志记录数组[i].includes(`✅`)) {
-                    文本 += 日志记录数组[i] + `\n`;
-                }
-            }
-            日志弹窗.querySelector(`textarea`).value = 文本;
-            记录日志函数(`✅ 仅显示✅日志`, `日志`);
-        });
-        日志弹窗.querySelector(`#仅显示🖱️按钮`).addEventListener(`click`, () => {
-            let 文本 = ``;
-            for (let i = 0; i < 日志记录数组.length; i++) {
-                if (日志记录数组[i].includes(`🖱️`)) {
-                    文本 += 日志记录数组[i] + `\n`;
-                }
-            }
-            日志弹窗.querySelector(`textarea`).value = 文本;
-            记录日志函数(`✅ 仅显示🖱️日志`, `日志`);
-        });
-        日志弹窗.querySelector(`#仅显示❌按钮`).addEventListener(`click`, () => {
-            let 文本 = ``;
-            for (let i = 0; i < 日志记录数组.length; i++) {
-                if (日志记录数组[i].includes(`❌`)) {
-                    文本 += 日志记录数组[i] + `\n`;
-                }
-            }
-            日志弹窗.querySelector(`textarea`).value = 文本;
-            记录日志函数(`✅ 仅显示❌日志`, `日志`);
-        });
-        日志弹窗.querySelector(`#仅显示⚠️按钮`).addEventListener(`click`, () => {
-            let 文本 = ``;
-            for (let i = 0; i < 日志记录数组.length; i++) {
-                if (日志记录数组[i].includes(`⚠️`)) {
-                    文本 += 日志记录数组[i] + `\n`;
-                }
-            }
-            日志弹窗.querySelector(`textarea`).value = 文本;
-            记录日志函数(`✅ 仅显示⚠️日志`, `日志`);
-        });
-        日志弹窗.querySelector(`#清空按钮`).addEventListener(`click`, () => {
-            日志记录数组.length = 0;
-            GM_setValue(`日志记录数组`, 日志记录数组);
-            日志弹窗.querySelector(`textarea`).value = ``;
-            记录日志函数(`✅ 已清空日志记录数组`, `日志`);
-        });
-        日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
-            GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
-            记录日志函数(`✅ 已复制到剪切板`, `日志`);
-        });
-        日志弹窗.querySelector(`#关闭按钮`).addEventListener(`click`, () => 日志弹窗.remove());
-    }));
-    菜单ID数组.push(GM_registerMenuCommand(`📜 查看报错记录`, () => {
-        let 日志弹窗 = document.createElement(`div`);
-        日志弹窗.innerHTML = `
-            <style>
-                .遮罩 {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.1);
-                    z-index: 9998;
-                }
-                .日志容器 {
-                    position: fixed;
-                    top: 20%; left: 20%;
-                    width: 60%; height: 60%;
-                    z-index: 9999;
-                    background: white;
-                    border: 2px solid #333;
-                    padding: 10px;
-                    box-shadow: 0 0 20px #000;
-                    display: flex;
-                    flex-direction: column;
-                }
-                .标题 {
-                    padding-bottom: 10px;
-                    border-bottom: 1px solid #eee;
-                }
-                .滚动区域 {
-                    flex: 1; /* 占据剩余空间 */
-                    min-height: 50px;
-                    overflow: hidden; /* 隐藏滚动条 */
-                }
-                .日志区域 {
-                    width: 100%;
-                    height: 100%;
-                    box-sizing: border-box;
-                    resize: none; /* 禁止用户拖拽调整 */
-                    font-size: 14px; /* 设置字体大小 */
-                    line-height: 1.5; /* 设置行高 */
-                }
-                .按钮区域 {
-                    display: flex; /* 弹性布局 */
-                    gap: 10px; /* 设置按钮间距 */
-                    padding: 10px 0 0; /* 设置内边距 */
-                    border-top: 1px solid #ddd; /* 上边框 */
-                }
-                .按钮区域 button {
-                    border: 1px solid #ccc;
-                    padding: 6px 12px;
-                    border-radius: 4px;
-                    background: white;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                }
-                .按钮区域 button:hover {
-                    border-color: #007bff;
-                }
-                .按钮区域 button:active {
-                    background-color: #f0f0f0;
-                }
-            </style>
-            <div class="遮罩" id="遮罩"></div>
-            <div class="日志容器" id="日志容器">
-                <div class="标题">
-                    <h3>报错记录数组（共${报错记录数组.length}条）</h3>
-                </div>
-                <div class="滚动区域">
-                    <textarea class="日志区域" readonly>${报错记录数组.join(`\n`)}</textarea>
-                </div>
-                <div class="按钮区域">
-                    <button id="清空按钮">清空</button>
-                    <button id="复制按钮">复制</button>
-                    <button id="关闭按钮">关闭</button>
-                </div>
-            </div>
-            `;
-        document.body.appendChild(日志弹窗);
-        日志弹窗.querySelector(`#遮罩`).addEventListener(`click`, () => 日志弹窗.remove());
-        日志弹窗.querySelector(`#日志容器`).addEventListener(`click`, (e) => e.stopPropagation());
-        日志弹窗.querySelector(`#清空按钮`).addEventListener(`click`, () => {
-            报错记录数组.length = 0;
-            GM_setValue(`报错记录数组`, 报错记录数组);
-            日志弹窗.querySelector(`textarea`).value = ``;
-            记录日志函数(`✅ 已清空报错记录数组`, `日志`);
-        });
-        日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
-            GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
-            记录日志函数(`✅ 已复制到剪切板`, `日志`);
         });
         日志弹窗.querySelector(`#关闭按钮`).addEventListener(`click`, () => 日志弹窗.remove());
     }));
