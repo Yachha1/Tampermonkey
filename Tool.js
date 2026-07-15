@@ -1237,6 +1237,7 @@ function 更新菜单函数() {
         日志弹窗.querySelector(`#日志容器`).addEventListener(`click`, (e) => e.stopPropagation());
         日志弹窗.querySelector(`#显示全部按钮`).addEventListener(`click`, () => {
             日志弹窗.querySelector(`textarea`).value = 日志记录数组.join(`\n`);
+            记录日志函数(`✅ 显示全部日志`, `日志`);
         });
         日志弹窗.querySelector(`#仅显示✅按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
@@ -1246,6 +1247,7 @@ function 更新菜单函数() {
                 }
             }
             日志弹窗.querySelector(`textarea`).value = 文本;
+            记录日志函数(`✅ 仅显示✅日志`, `日志`);
         });
         日志弹窗.querySelector(`#仅显示🖱️按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
@@ -1255,6 +1257,7 @@ function 更新菜单函数() {
                 }
             }
             日志弹窗.querySelector(`textarea`).value = 文本;
+            记录日志函数(`✅ 仅显示🖱️日志`, `日志`);
         });
         日志弹窗.querySelector(`#仅显示❌按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
@@ -1264,6 +1267,7 @@ function 更新菜单函数() {
                 }
             }
             日志弹窗.querySelector(`textarea`).value = 文本;
+            记录日志函数(`✅ 仅显示❌日志`, `日志`);
         });
         日志弹窗.querySelector(`#仅显示⚠️按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
@@ -1273,11 +1277,13 @@ function 更新菜单函数() {
                 }
             }
             日志弹窗.querySelector(`textarea`).value = 文本;
+            记录日志函数(`✅ 仅显示⚠️日志`, `日志`);
         });
         日志弹窗.querySelector(`#清空按钮`).addEventListener(`click`, () => {
             日志记录数组.length = 0;
             GM_setValue(`日志记录数组`, 日志记录数组);
             日志弹窗.querySelector(`textarea`).value = ``;
+            记录日志函数(`✅ 已清空日志记录数组`, `日志`);
         });
         日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
             GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
@@ -1370,6 +1376,7 @@ function 更新菜单函数() {
             报错记录数组.length = 0;
             GM_setValue(`报错记录数组`, 报错记录数组);
             日志弹窗.querySelector(`textarea`).value = ``;
+            记录日志函数(`✅ 已清空报错记录数组`, `日志`);
         });
         日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
             GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
