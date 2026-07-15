@@ -1650,6 +1650,15 @@ function 记录日志函数(文本参数, 类型参数) {
 }
 
 function 初始化函数() {
+    window.数据选项对象 = {};
+    let 全部变量 = Object.keys(window);
+    全部变量.forEach(变量名 => {
+        if (变量名.endsWith(`数组`) && Array.isArray(window[变量名])
+            && 变量名 != `菜单ID数组`) {
+            window.数据选项对象[变量名] = window[变量名];
+        }
+    });
+
     更新菜单函数();
 
     for (let 脚本名称 in 配置对象) {
