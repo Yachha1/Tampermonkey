@@ -1140,6 +1140,8 @@ function 更新菜单函数() {
         日志弹窗.querySelector(`#日志容器`).addEventListener(`click`, (e) => e.stopPropagation());
         日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
             GM_setClipboard(日志弹窗.querySelector(`#文本区域`).value);
+            记录日志函数(`✅ 已复制到剪切板`, `日志`);
+
             let 复制按钮 = 日志弹窗.querySelector(`#复制按钮`);
             let 原文本 = 复制按钮.textContent;
             复制按钮.textContent = `已复制`;
@@ -1277,7 +1279,10 @@ function 更新菜单函数() {
             GM_setValue(`日志记录数组`, 日志记录数组);
             日志弹窗.querySelector(`textarea`).value = ``;
         });
-        日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => GM_setClipboard(日志弹窗.querySelector(`textarea`).value));
+        日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
+            GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
+            记录日志函数(`✅ 已复制到剪切板`, `日志`);
+        });
         日志弹窗.querySelector(`#关闭按钮`).addEventListener(`click`, () => 日志弹窗.remove());
     }));
     菜单ID数组.push(GM_registerMenuCommand(`📜 查看报错记录`, () => {
@@ -1366,7 +1371,10 @@ function 更新菜单函数() {
             GM_setValue(`报错记录数组`, 报错记录数组);
             日志弹窗.querySelector(`textarea`).value = ``;
         });
-        日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => GM_setClipboard(日志弹窗.querySelector(`textarea`).value));
+        日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
+            GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
+            记录日志函数(`✅ 已复制到剪切板`, `日志`);
+        });
         日志弹窗.querySelector(`#关闭按钮`).addEventListener(`click`, () => 日志弹窗.remove());
     }));
 }
