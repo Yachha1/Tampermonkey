@@ -1,3 +1,32 @@
+window.菜单ID数组 = GM_getValue(`菜单ID数组`, []);
+window.网站地址数组 = GM_getValue(`网站地址数组`, []);
+window.请求情况数组 = GM_getValue(`请求情况数组`, []);
+window.日志记录数组 = GM_getValue(`日志记录数组`, []);
+window.报错记录数组 = GM_getValue(`报错记录数组`, []);
+window.当前脚本名称 = GM_getValue(`当前脚本名称`, ``);
+window.执行脚本定时器 = GM_getValue(`执行脚本定时器`, null);
+window.实时执行定时器 = GM_getValue(`实时执行定时器`, null);
+window.总线程数 = GM_getValue(`总线程数`, 1);
+window.当前步骤ID = GM_getValue(`当前步骤ID`, 0);
+window.脚本循环次数 = GM_getValue(`脚本循环次数`, 1);
+window.当前循环次数 = GM_getValue(`当前循环次数`, 0);
+window.当前重试次数 = GM_getValue(`当前重试次数`, 0);
+window.当前循环保护次数 = GM_getValue(`当前循环保护次数`, 0);
+window.最大循环保护次数 = GM_getValue(`最大循环保护次数`, 10000);
+window.等待网页稳定时间 = GM_getValue(`等待网页稳定时间`, 500);
+window.执行操作前等待时间 = GM_getValue(`执行操作前等待时间`, 100);
+window.重新执行操作等待时间 = GM_getValue(`重新执行操作等待时间`, 0);
+window.重新查找元素等待时间 = GM_getValue(`重新查找元素等待时间`, 1000);
+window.实时执行定时器间隔时间 = GM_getValue(`实时执行定时器间隔时间`, 5 * 60);
+window.继续按钮坐标数组 = GM_getValue(`继续按钮坐标数组`, [10, 93]);
+window.是否正在运行 = GM_getValue(`是否正在运行`, false);
+window.是否暂停运行 = GM_getValue(`是否暂停运行`, false);
+window.是否正在重试 = GM_getValue(`是否正在重试`, false);
+window.是否重新执行操作 = GM_getValue(`是否重新执行操作`, false);
+window.是否跳过获取循环次数 = GM_getValue(`是否跳过获取循环次数`, false);
+window.是否结束等待执行操作 = GM_getValue(`是否结束等待执行操作`, false);
+window.是否开启实时执行定时器 = GM_getValue(`是否开启实时执行定时器`, false);
+
 function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
     let 进度索引 = 0;
     let 完成数量 = 0;
