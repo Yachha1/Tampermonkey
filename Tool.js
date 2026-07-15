@@ -957,7 +957,7 @@ function 导入数据数组函数(数组对象参数, 文本数据参数) {
 
 function 更新菜单函数() {
     菜单ID数组.forEach(id => GM_unregisterMenuCommand(id));
-    菜单ID数组 = [];
+    菜单ID数组.length = 0;
 
     Object.keys(配置对象).forEach(脚本名称 => {
         if (当前脚本名称 == 脚本名称 && 是否正在运行) {
@@ -1072,7 +1072,7 @@ function 更新菜单函数() {
                     overflow: hidden;
                     margin-bottom: 15px;
                 }
-                textarea {
+                .日志区域 {
                     width: 100%;
                     height: 100%;
                     box-sizing: border-box;
@@ -1120,7 +1120,7 @@ function 更新菜单函数() {
                     </select>
                 </div>
                 <div class="滚动区域">
-                    <textarea id="文本区域" readonly></textarea>
+                    <textarea class="日志区域" id="文本区域" readonly></textarea>
                 </div>
                 <div class="按钮区域">
                     <span class="数据条数" id="数据条数"></span>
@@ -1181,7 +1181,7 @@ function 更新菜单函数() {
                     min-height: 50px;
                     overflow: hidden; /* 隐藏滚动条 */
                 }
-                textarea {
+                .日志区域 {
                     width: 100%;
                     height: 100%;
                     box-sizing: border-box;
@@ -1216,7 +1216,7 @@ function 更新菜单函数() {
                     <h3>日志记录数组（共${日志记录数组.length}条）</h3>
                 </div>
                 <div class="滚动区域">
-                    <textarea readonly>${日志记录数组.join(`\n`)}</textarea>
+                    <textarea class="日志区域" readonly>${日志记录数组.join(`\n`)}</textarea>
                 </div>
                 <div class="按钮区域">
                     <button id="显示全部按钮">显示全部</button>
@@ -1273,7 +1273,7 @@ function 更新菜单函数() {
             日志弹窗.querySelector(`textarea`).value = 文本;
         });
         日志弹窗.querySelector(`#清空按钮`).addEventListener(`click`, () => {
-            日志记录数组 = [];
+            日志记录数组.length = 0;
             GM_setValue(`日志记录数组`, 日志记录数组);
             日志弹窗.querySelector(`textarea`).value = ``;
         });
@@ -1314,7 +1314,7 @@ function 更新菜单函数() {
                     min-height: 50px;
                     overflow: hidden; /* 隐藏滚动条 */
                 }
-                textarea {
+                .日志区域 {
                     width: 100%;
                     height: 100%;
                     box-sizing: border-box;
@@ -1349,7 +1349,7 @@ function 更新菜单函数() {
                     <h3>报错记录数组（共${报错记录数组.length}条）</h3>
                 </div>
                 <div class="滚动区域">
-                    <textarea readonly>${报错记录数组.join(`\n`)}</textarea>
+                    <textarea class="日志区域" readonly>${报错记录数组.join(`\n`)}</textarea>
                 </div>
                 <div class="按钮区域">
                     <button id="清空按钮">清空</button>
@@ -1362,7 +1362,7 @@ function 更新菜单函数() {
         日志弹窗.querySelector(`#遮罩`).addEventListener(`click`, () => 日志弹窗.remove());
         日志弹窗.querySelector(`#日志容器`).addEventListener(`click`, (e) => e.stopPropagation());
         日志弹窗.querySelector(`#清空按钮`).addEventListener(`click`, () => {
-            报错记录数组 = [];
+            报错记录数组.length = 0;
             GM_setValue(`报错记录数组`, 报错记录数组);
             日志弹窗.querySelector(`textarea`).value = ``;
         });
@@ -1424,9 +1424,9 @@ function 循环保护函数() {
 function 启动流程函数() {
     if (是否正在运行) return;
 
-    日志记录数组 = [];
+    日志记录数组.length = 0;
     GM_setValue(`日志记录数组`, 日志记录数组);
-    报错记录数组 = [];
+    报错记录数组.length = 0;
     GM_setValue(`报错记录数组`, 报错记录数组);
 
     if (配置对象[当前脚本名称]?.是否确认执行) {
