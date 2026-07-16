@@ -27,10 +27,13 @@ window.是否跳过获取循环次数 = GM_getValue(`是否跳过获取循环次
 window.是否结束等待执行操作 = GM_getValue(`是否结束等待执行操作`, false);
 window.是否开启实时执行定时器 = GM_getValue(`是否开启实时执行定时器`, false);
 
-function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
+function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数) {
     let 进度索引 = 0;
     let 完成数量 = 0;
     let 可用线程 = 总线程数;
+    if (是否自动重定向参数 === undefined) {
+        是否自动重定向参数 = true;
+    }
 
     发起单个HTTP请求函数();
 
@@ -45,6 +48,7 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
             GM_xmlhttpRequest({
                 method: `GET`,
                 url: 网站地址数组[当前索引],
+                redirect: 是否自动重定向参数 ? `follow` : `manual`,
                 onload: function (响应信息) {
                     响应函数(响应信息, 当前索引);
 
@@ -105,6 +109,7 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数) {
         GM_xmlhttpRequest({
             method: `GET`,
             url: 网站地址数组[当前索引参数],
+            redirect: 是否自动重定向参数 ? `follow` : `manual`,
             onload: function (响应信息) {
                 响应函数(响应信息, 当前索引参数);
 
