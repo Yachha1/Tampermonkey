@@ -986,7 +986,7 @@ function 导入数据数组函数(数组对象参数, 文本数据参数) {
 
 function 获取配置信息函数(数组对象参数){
     let 配置信息 = ``;
-    Object.keys(数组对象).forEach(数组名称 => {
+    Object.keys(数组对象参数).forEach(数组名称 => {
         配置信息 += 数组名称.replaceAll(`数组`, ``) + `\t`;
     });
     配置信息 = 配置信息.slice(0, -1);
