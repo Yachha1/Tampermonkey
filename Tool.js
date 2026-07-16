@@ -1636,3 +1636,20 @@ window.addEventListener(`load`, () => {
         }
     }
 });
+
+window.按下键数组 = [];
+document.addEventListener(`keydown`, function(event) {
+    if(!按下键数组.includes(event.key.toString().toLowerCase()))
+    {
+        按下键数组.push(event.key.toString().toLowerCase());
+    }
+    if (按下键数组.includes(`s`) && 按下键数组.includes(`x`) && 按下键数组.length == 2) {
+        按下键数组.length = 0;
+        记录日志函数(`✅ 强制更新菜单`, `日志`);
+        更新菜单函数();
+    }
+});
+
+document.addEventListener(`keyup`, function(event) {
+    按下键数组.length = 0;
+});
