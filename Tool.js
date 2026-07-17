@@ -1047,7 +1047,7 @@ function 更新菜单函数() {
             }
             .标题 {
                 padding-bottom: 10px;             /* 设置下内边距 */
-                border-bottom: 1px solid #eee;    /* 设置底部边框（宽度、样式、颜色） */
+                border-bottom: 1px solid #eee;    /* 设置下边框（宽度、样式、颜色） */
             }
             .滚动区域 {
                 flex: 1;            /* 设置可以扩展并占据剩余空间 */
@@ -1066,7 +1066,7 @@ function 更新菜单函数() {
                 display: flex;                 /* 启用Flex布局（弹性） */
                 gap: 10px;                     /* 设置容器内子元素间距 */
                 padding: 10px 0 0;             /* 设置内边距 */
-                border-top: 1px solid #ddd;    /* 设置顶部边框（宽度、样式、颜色） */
+                border-top: 1px solid #ddd;    /* 设置上边框（宽度、样式、颜色） */
             }
             .按钮区域 button {
                 border: 1px solid #ccc;     /* 设置边框（宽度、样式、颜色） */
