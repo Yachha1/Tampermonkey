@@ -1030,7 +1030,7 @@ function 更新菜单函数() {
                 position: fixed;                 /* 固定定位，位置相对于浏览器窗口 */
                 top: 0; left: 0;                 /* 设置垂直位置、设置水平位置 */
                 width: 100%; height: 100%;       /* 设置宽度占比、设置高度占比 */
-                background: rgba(0,0,0,0.1);   /* 设置背景颜色 */
+                background: rgba(0,0,0,0.1);     /* 设置背景颜色 */
                 z-index: 9998;                   /* 设置层级 */
             }
             .日志容器 {
@@ -1039,15 +1039,15 @@ function 更新菜单函数() {
                 width: 60%; height: 60%;     /* 设置宽度占比、设置高度占比 */
                 z-index: 9999;               /* 设置层级 */
                 background: white;           /* 设置背景颜色 */
-                border: 2px solid #333;    /* 设置边框（宽度、样式、颜色） */
-                padding: 10px;               /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
-                box-shadow: 0 0 20px #000; /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
+                border: 2px solid #333;      /* 设置边框（宽度、样式、颜色） */
+                padding: 10px;               /* 设置内边距 */
+                box-shadow: 0 0 20px #000;   /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
                 display: flex;               /* 启用Flex布局（弹性） */
                 flex-direction: column;      /* 垂直排列子元素 */
             }
             .标题 {
                 padding-bottom: 10px;             /* 设置下内边距 */
-                border-bottom: 1px solid #eee;  /* 设置底部边框（宽度、样式、颜色） */
+                border-bottom: 1px solid #eee;    /* 设置底部边框（宽度、样式、颜色） */
             }
             .滚动区域 {
                 flex: 1;            /* 设置可以扩展并占据剩余空间 */
@@ -1065,12 +1065,12 @@ function 更新菜单函数() {
             .按钮区域 {
                 display: flex;                 /* 启用Flex布局（弹性） */
                 gap: 10px;                     /* 设置容器内子元素间距 */
-                padding: 10px 0 0;             /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
-                border-top: 1px solid #ddd;  /* 设置顶部边框（宽度、样式、颜色） */
+                padding: 10px 0 0;             /* 设置内边距 */
+                border-top: 1px solid #ddd;    /* 设置顶部边框（宽度、样式、颜色） */
             }
             .按钮区域 button {
-                border: 1px solid #ccc;   /* 设置边框（宽度、样式、颜色） */
-                padding: 6px 12px;          /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                border: 1px solid #ccc;     /* 设置边框（宽度、样式、颜色） */
+                padding: 6px 12px;          /* 设置内边距 */
                 border-radius: 4px;         /* 设置边框圆角半径 */
                 background: white;          /* 设置背景颜色 */
                 cursor: pointer;            /* 设置鼠标光标样式（手形指针） */
@@ -1218,7 +1218,7 @@ function 更新菜单函数() {
                 z-index: 9999;                 /* 设置层级 */
                 background: white;             /* 设置背景颜色 */
                 border: 2px solid #333;        /* 设置边框（宽度、样式、颜色） */
-                padding: 20px;                 /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                padding: 20px;                 /* 设置内边距 */
                 box-shadow: 0 0 20px #000;     /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
                 display: flex;                 /* 启用Flex布局（弹性） */
                 flex-direction: column;        /* 垂直排列子元素 */
@@ -1227,10 +1227,10 @@ function 更新菜单函数() {
             .标题区域 {
                 display: flex;                 /* 启用Flex布局（弹性） */
                 justify-content: center;       /* 设置对齐方式（水平居中） */
-                margin-bottom: 15px;           /* 下外边距 */
+                margin-bottom: 15px;           /* 设置下外边距 */
             }
             #查看数据下拉框 {
-                padding: 12px 15px;            /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                padding: 12px 15px;            /* 设置内边距 */
                 border: 1px solid #ccc;        /* 设置边框（宽度、样式、颜色） */
                 border-radius: 6px;            /* 设置边框圆角半径 */
                 font-size: 20px;               /* 设置字体大小 */
@@ -1242,13 +1242,13 @@ function 更新菜单函数() {
             .滚动区域 {
                 flex: 1;                       /* 设置可以扩展并占据剩余空间 */
                 overflow: hidden;              /* 隐藏滚动条 */
-                margin-bottom: 15px;           /* 下外边距 */
+                margin-bottom: 15px;           /* 设置下外边距 */
             }
             .日志区域 {
                 width: 100%; height: 100%;     /* 设置宽度占比、设置高度占比 */
                 box-sizing: border-box;        /* 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距） */
                 resize: none;                  /* 禁止用户调整大小 */
-                padding: 12px;                 /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                padding: 12px;                 /* 设置内边距 */
                 border: 1px solid #ddd;        /* 设置边框（宽度、样式、颜色） */
                 border-radius: 4px;            /* 设置边框圆角半径 */
                 font-family: monospace;        /* 设置字体 */
@@ -1262,7 +1262,7 @@ function 更新菜单函数() {
             }
             .数据条数 {
                 margin-right: auto;            /* 设置元素右侧外边距为自动 */
-                padding: 8px 12px;             /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                padding: 8px 12px;             /* 设置内边距 */
                 border: 1px solid #ddd;        /* 设置边框（宽度、样式、颜色） */
                 border-radius: 4px;            /* 设置边框圆角半径 */
                 background-color: #f8f9fa;     /* 设置背景颜色 */
@@ -1271,7 +1271,7 @@ function 更新菜单函数() {
             }
             .按钮区域 button {
                 border: 1px solid #ccc;        /* 设置边框（宽度、样式、颜色） */
-                padding: 10px 18px;            /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                padding: 10px 18px;            /* 设置内边距 */
                 border-radius: 4px;            /* 设置边框圆角半径 */
                 background: white;             /* 设置背景颜色 */
                 cursor: pointer;               /* 设置鼠标光标样式（手形指针） */
@@ -1380,19 +1380,19 @@ function 暂停运行函数() {
     按钮弹窗.innerHTML = `
     <style>
         #继续按钮 {
-            position: fixed;                         /* 固定定位，位置相对于浏览器窗口 */
+            position: fixed;                          /* 固定定位，位置相对于浏览器窗口 */
             top: ${继续按钮坐标数组[0]}%;              /* 设置垂直位置 */
             left: ${继续按钮坐标数组[1]}%;             /* 设置水平位置 */
             transform: translate(-50%, -50%);         /* 设置轴心到中点 */
             z-index: 9999;                            /* 设置层级 */
-            padding: 12px 22px;                       /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+            padding: 12px 22px;                       /* 设置内边距 */
             font-size: 15px;                          /* 设置字体大小 */
             color: white;                             /* 设置文字颜色 */
-            background-color: #007bff;              /* 设置背景颜色 */
+            background-color: #007bff;                /* 设置背景颜色 */
             border: none;                             /* 设置无边框 */
             border-radius: 6px;                       /* 设置边框圆角半径 */
             cursor: pointer;                          /* 设置鼠标光标样式（手形指针） */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);  /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);    /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
             transition: background-color 0.2s;        /* 设置背景颜色过渡持续时间 */
         }
         /* 按钮悬停效果 */
