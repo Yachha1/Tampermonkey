@@ -1025,83 +1025,83 @@ function 更新菜单函数() {
         let 文本 = ``;
         let 日志弹窗 = document.createElement(`div`);
         日志弹窗.innerHTML = `
-            <style>
-                .遮罩 {
-                    position: fixed;                 // 固定定位，位置相对于浏览器窗口
-                    top: 0; left: 0;                 // 设置垂直位置、设置水平位置
-                    width: 100%; height: 100%;       // 设置宽度占比、设置高度占比
-                    background: rgba(0,0,0,0.1);   // 设置背景颜色
-                    z-index: 9998;                   // 设置层级
-                }
-                .日志容器 {
-                    position: fixed;             // 固定定位，位置相对于浏览器窗口
-                    top: 20%; left: 20%;         // 设置垂直位置、设置水平位置
-                    width: 60%; height: 60%;     // 设置宽度占比、设置高度占比
-                    z-index: 9999;               // 设置层级
-                    background: white;           // 设置背景颜色
-                    border: 2px solid #333;    // 设置边框（宽度、样式、颜色）
-                    padding: 10px;               // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    box-shadow: 0 0 20px #000; // 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色）
-                    display: flex;               // 启用Flex布局（弹性）
-                    flex-direction: column;      // 垂直排列子元素
-                }
-                .标题 {
-                    padding-bottom: 10px;             // 设置下内边距
-                    border-bottom: 1px solid #eee;  // 设置底部边框（宽度、样式、颜色）
-                }
-                .滚动区域 {
-                    flex: 1;            // 设置可以扩展并占据剩余空间
-                    min-height: 50px;   // 设置最小高度
-                    overflow: hidden;   // 隐藏滚动条
-                    display: flex;      // 启用Flex布局（弹性）
-                }
-                .日志区域 {
-                    width: 100%; height: 100%;  // 设置宽度占比、设置高度占比
-                    box-sizing: border-box;     // 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距）
-                    resize: none;               // 禁止用户调整大小
-                    font-size: 14px;            // 设置字体大小
-                    line-height: 1.5;           // 设置行高
-                }
-                .按钮区域 {
-                    display: flex;                 // 启用Flex布局（弹性）
-                    gap: 10px;                     // 设置容器内子元素间距
-                    padding: 10px 0 0;             // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    border-top: 1px solid #ddd;  // 设置顶部边框（宽度、样式、颜色）
-                }
-                .按钮区域 button {
-                    border: 1px solid #ccc;   // 设置边框（宽度、样式、颜色）
-                    padding: 6px 12px;          // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    border-radius: 4px;         // 设置边框圆角半径
-                    background: white;          // 设置背景颜色
-                    cursor: pointer;            // 设置鼠标光标样式（手形指针）
-                    transition: all 0.2s;       // 设置过渡持续时间
-                }
-                // 按钮悬停效果
-                .按钮区域 button:hover {
-                    border-color: #007bff;    //设置边框颜色
-                }
-                // 按钮点击效果
-                .按钮区域 button:active {
-                    background-color: #f0f0f0; // 设置背景颜色
-                }
-            </style>
-            <div class="遮罩" id="遮罩"></div>
-            <div class="日志容器" id="日志容器">
-                <div class="标题">
-                    <h3>设置【批量勾选/取消勾选】</h3>
-                </div>
-                <div class="滚动区域">
-                    <textarea class="日志区域" readonly>${文本}</textarea>
-                </div>
-                <div class="按钮区域">
-                    <button id="是否开启实时执行定时器按钮">是否开启实时执行定时器</button>
-                    <button id="设置总线程数按钮">设置总线程数</button>
-                    <button id="设置实时执行定时器间隔时间按钮">设置实时执行定时器间隔时间</button>
-                    <button id="复制按钮">复制</button>
-                    <button id="关闭按钮">关闭</button>
-                </div>
+        <style>
+            .遮罩 {
+                position: fixed;                 /* 固定定位，位置相对于浏览器窗口 */
+                top: 0; left: 0;                 /* 设置垂直位置、设置水平位置 */
+                width: 100%; height: 100%;       /* 设置宽度占比、设置高度占比 */
+                background: rgba(0,0,0,0.1);   /* 设置背景颜色 */
+                z-index: 9998;                   /* 设置层级 */
+            }
+            .日志容器 {
+                position: fixed;             /* 固定定位，位置相对于浏览器窗口 */
+                top: 20%; left: 20%;         /* 设置垂直位置、设置水平位置 */
+                width: 60%; height: 60%;     /* 设置宽度占比、设置高度占比 */
+                z-index: 9999;               /* 设置层级 */
+                background: white;           /* 设置背景颜色 */
+                border: 2px solid #333;    /* 设置边框（宽度、样式、颜色） */
+                padding: 10px;               /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                box-shadow: 0 0 20px #000; /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
+                display: flex;               /* 启用Flex布局（弹性） */
+                flex-direction: column;      /* 垂直排列子元素 */
+            }
+            .标题 {
+                padding-bottom: 10px;             /* 设置下内边距 */
+                border-bottom: 1px solid #eee;  /* 设置底部边框（宽度、样式、颜色） */
+            }
+            .滚动区域 {
+                flex: 1;            /* 设置可以扩展并占据剩余空间 */
+                min-height: 50px;   /* 设置最小高度 */
+                overflow: hidden;   /* 隐藏滚动条 */
+                display: flex;      /* 启用Flex布局（弹性） */
+            }
+            .日志区域 {
+                width: 100%; height: 100%;  /* 设置宽度占比、设置高度占比 */
+                box-sizing: border-box;     /* 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距） */
+                resize: none;               /* 禁止用户调整大小 */
+                font-size: 14px;            /* 设置字体大小 */
+                line-height: 1.5;           /* 设置行高 */
+            }
+            .按钮区域 {
+                display: flex;                 /* 启用Flex布局（弹性） */
+                gap: 10px;                     /* 设置容器内子元素间距 */
+                padding: 10px 0 0;             /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                border-top: 1px solid #ddd;  /* 设置顶部边框（宽度、样式、颜色） */
+            }
+            .按钮区域 button {
+                border: 1px solid #ccc;   /* 设置边框（宽度、样式、颜色） */
+                padding: 6px 12px;          /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                border-radius: 4px;         /* 设置边框圆角半径 */
+                background: white;          /* 设置背景颜色 */
+                cursor: pointer;            /* 设置鼠标光标样式（手形指针） */
+                transition: all 0.2s;       /* 设置过渡持续时间 */
+            }
+            /* 按钮悬停效果 */
+            .按钮区域 button:hover {
+                border-color: #007bff;    /* 设置边框颜色 */
+            }
+            /* 按钮点击效果 */
+            .按钮区域 button:active {
+                background-color: #f0f0f0; /* 设置背景颜色 */
+            }
+        </style>
+        <div class="遮罩" id="遮罩"></div>
+        <div class="日志容器" id="日志容器">
+            <div class="标题">
+                <h3>设置【批量勾选/取消勾选】</h3>
             </div>
-            `;
+            <div class="滚动区域">
+                <textarea class="日志区域" readonly>${文本}</textarea>
+            </div>
+            <div class="按钮区域">
+                <button id="是否开启实时执行定时器按钮">是否开启实时执行定时器</button>
+                <button id="设置总线程数按钮">设置总线程数</button>
+                <button id="设置实时执行定时器间隔时间按钮">设置实时执行定时器间隔时间</button>
+                <button id="复制按钮">复制</button>
+                <button id="关闭按钮">关闭</button>
+            </div>
+        </div>
+        `;
         刷新UI函数();
         document.body.appendChild(日志弹窗);
         日志弹窗.querySelector(`#遮罩`).addEventListener(`click`, () => {
@@ -1171,6 +1171,7 @@ function 更新菜单函数() {
         });
         日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
             GM_setClipboard(日志弹窗.querySelector(`textarea`).value);
+            记录日志函数(`✅ 已复制到剪切板`, `日志`);
         });
         日志弹窗.querySelector(`#关闭按钮`).addEventListener(`click`, () => {
             日志弹窗.remove();
@@ -1202,110 +1203,110 @@ function 更新菜单函数() {
 
         let 日志弹窗 = document.createElement(`div`);
         日志弹窗.innerHTML = `
-            <style>
-                .遮罩 {
-                    position: fixed;               // 固定定位，位置相对于浏览器窗口
-                    top: 0; left: 0;               // 设置垂直位置、设置水平位置
-                    width: 100%; height: 100%;     // 设置宽度占比、设置高度占比
-                    background: rgba(0,0,0,0.1); // 设置背景颜色
-                    z-index: 9998;                 // 设置层级
-                }
-                .日志容器 {
-                    position: fixed;             // 固定定位，位置相对于浏览器窗口
-                    top: 10%; left: 10%;         // 设置垂直位置、设置水平位置
-                    width: 80%; height: 80%;     // 设置宽度占比、设置高度占比
-                    z-index: 9999;               // 设置层级
-                    background: white;           // 设置背景颜色
-                    border: 2px solid #333;    // 设置边框（宽度、样式、颜色）
-                    padding: 20px;               // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    box-shadow: 0 0 20px #000; // 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色）
-                    display: flex;               // 启用Flex布局（弹性）
-                    flex-direction: column;      // 垂直排列子元素
-                    border-radius: 8px;          // 设置边框圆角半径
-                }
-                .标题区域 {
-                    display: flex;            // 启用Flex布局（弹性）
-                    justify-content: center;  // 设置对齐方式（水平居中）
-                    margin-bottom: 15px;      // 下外边距
-                }
-                #查看数据下拉框 {
-                    padding: 12px 15px;           // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    border: 1px solid #ccc;     // 设置边框（宽度、样式、颜色）
-                    border-radius: 6px;           // 设置边框圆角半径
-                    font-size: 20px;              // 设置字体大小
-                    width: 100%;                  // 设置宽度占比
-                    height: auto;                 // 高度自适应
-                    background-color: #f9f9f9;  // 设置背景颜色
-                    box-sizing: border-box;       // 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距）
-                }
-                .滚动区域 {
-                    flex: 1;                 // 设置可以扩展并占据剩余空间
-                    overflow: hidden;        // 隐藏滚动条
-                    margin-bottom: 15px;     // 下外边距
-                }
-                .日志区域 {
-                    width: 100%; height: 100%;  // 设置宽度占比、设置高度占比
-                    box-sizing: border-box;     // 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距）
-                    resize: none;               // 禁止用户调整大小
-                    padding: 12px;              // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    border: 1px solid #ddd;   // 设置边框（宽度、样式、颜色）
-                    border-radius: 4px;         // 设置边框圆角半径
-                    font-family: monospace;     // 设置字体
-                    font-size: 15px;            // 设置字体大小
-                    line-height: 1.5;           // 设置行高
-                }
-                .按钮区域 {
-                    display: flex;              // 启用Flex布局（弹性）
-                    justify-content: flex-end;  // 设置对齐方式（靠右对齐）
-                    gap: 10px;                  // 设置容器内子元素间距
-                }
-                .数据条数 {
-                    margin-right: auto;          // 设置元素右侧外边距为自动
-                    padding: 8px 12px;           // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    border: 1px solid #ddd;    // 设置边框（宽度、样式、颜色）
-                    border-radius: 4px;          // 设置边框圆角半径
-                    background-color: #f8f9fa; // 设置背景颜色
-                    font-size: 20px;             // 设置字体大小
-                    color: #666;               // 设置字体颜色
-                }
-                .按钮区域 button {
-                    border: 1px solid #ccc; // 设置边框（宽度、样式、颜色）
-                    padding: 10px 18px;       // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                    border-radius: 4px;       // 设置边框圆角半径
-                    background: white;        // 设置背景颜色
-                    cursor: pointer;          // 设置鼠标光标样式（手形指针）
-                    transition: all 0.2s;     // 设置过渡持续时间
-                    font-size: 14px;          // 设置字体大小
-                }
-                // 按钮悬停效果
-                .按钮区域 button:hover {
-                    background-color: #f0f0f0; // 设置背景颜色
-                    border-color: #999;        // 设置边框颜色
-                }
-            </style>
-            <div class="遮罩" id="遮罩"></div>
-            <div class="日志容器" id="日志容器">
-                <div class="标题区域">
-                    <select id="查看数据下拉框">
-                        ${Object.keys(数据选项对象).map(key => `<option value="${key}">${key}</option>`).join(``)}
-                    </select>
-                </div>
-                <div class="滚动区域">
-                    <textarea class="日志区域" id="文本区域" readonly></textarea>
-                </div>
-                <div class="按钮区域">
-                    <span class="数据条数" id="数据条数"></span>
-                    <button id="显示全部按钮">显示全部</button>
-                    <button id="仅显示✅按钮">仅显示✅</button>
-                    <button id="仅显示🖱️按钮">仅显示🖱️</button>
-                    <button id="仅显示❌按钮">仅显示❌</button>
-                    <button id="仅显示⚠️按钮">仅显示⚠️</button>
-                    <button id="清空按钮">清空</button>
-                    <button id="复制按钮">复制</button>
-                    <button id="关闭按钮">关闭</button>
-                </div>
+        <style>
+            .遮罩 {
+                position: fixed;               /* 固定定位，位置相对于浏览器窗口 */
+                top: 0; left: 0;               /* 设置垂直位置、设置水平位置 */
+                width: 100%; height: 100%;     /* 设置宽度占比、设置高度占比 */
+                background: rgba(0,0,0,0.1);   /* 设置背景颜色 */
+                z-index: 9998;                 /* 设置层级 */
+            }
+            .日志容器 {
+                position: fixed;               /* 固定定位，位置相对于浏览器窗口 */
+                top: 10%; left: 10%;           /* 设置垂直位置、设置水平位置 */
+                width: 80%; height: 80%;       /* 设置宽度占比、设置高度占比 */
+                z-index: 9999;                 /* 设置层级 */
+                background: white;             /* 设置背景颜色 */
+                border: 2px solid #333;        /* 设置边框（宽度、样式、颜色） */
+                padding: 20px;                 /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                box-shadow: 0 0 20px #000;     /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
+                display: flex;                 /* 启用Flex布局（弹性） */
+                flex-direction: column;        /* 垂直排列子元素 */
+                border-radius: 8px;            /* 设置边框圆角半径 */
+            }
+            .标题区域 {
+                display: flex;                 /* 启用Flex布局（弹性） */
+                justify-content: center;       /* 设置对齐方式（水平居中） */
+                margin-bottom: 15px;           /* 下外边距 */
+            }
+            #查看数据下拉框 {
+                padding: 12px 15px;            /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                border: 1px solid #ccc;        /* 设置边框（宽度、样式、颜色） */
+                border-radius: 6px;            /* 设置边框圆角半径 */
+                font-size: 20px;               /* 设置字体大小 */
+                width: 100%;                   /* 设置宽度占比 */
+                height: auto;                  /* 高度自适应 */
+                background-color: #f9f9f9;     /* 设置背景颜色 */
+                box-sizing: border-box;        /* 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距） */
+            }
+            .滚动区域 {
+                flex: 1;                       /* 设置可以扩展并占据剩余空间 */
+                overflow: hidden;              /* 隐藏滚动条 */
+                margin-bottom: 15px;           /* 下外边距 */
+            }
+            .日志区域 {
+                width: 100%; height: 100%;     /* 设置宽度占比、设置高度占比 */
+                box-sizing: border-box;        /* 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距） */
+                resize: none;                  /* 禁止用户调整大小 */
+                padding: 12px;                 /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                border: 1px solid #ddd;        /* 设置边框（宽度、样式、颜色） */
+                border-radius: 4px;            /* 设置边框圆角半径 */
+                font-family: monospace;        /* 设置字体 */
+                font-size: 15px;               /* 设置字体大小 */
+                line-height: 1.5;              /* 设置行高 */
+            }
+            .按钮区域 {
+                display: flex;                 /* 启用Flex布局（弹性） */
+                justify-content: flex-end;     /* 设置对齐方式（靠右对齐） */
+                gap: 10px;                     /* 设置容器内子元素间距 */
+            }
+            .数据条数 {
+                margin-right: auto;            /* 设置元素右侧外边距为自动 */
+                padding: 8px 12px;             /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                border: 1px solid #ddd;        /* 设置边框（宽度、样式、颜色） */
+                border-radius: 4px;            /* 设置边框圆角半径 */
+                background-color: #f8f9fa;     /* 设置背景颜色 */
+                font-size: 20px;               /* 设置字体大小 */
+                color: #666;                   /* 设置字体颜色 */
+            }
+            .按钮区域 button {
+                border: 1px solid #ccc;        /* 设置边框（宽度、样式、颜色） */
+                padding: 10px 18px;            /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+                border-radius: 4px;            /* 设置边框圆角半径 */
+                background: white;             /* 设置背景颜色 */
+                cursor: pointer;               /* 设置鼠标光标样式（手形指针） */
+                transition: all 0.2s;          /* 设置过渡持续时间 */
+                font-size: 14px;               /* 设置字体大小 */
+            }
+            /* 按钮悬停效果 */
+            .按钮区域 button:hover {
+                background-color: #f0f0f0;     /* 设置背景颜色 */
+                border-color: #999;            /* 设置边框颜色 */
+            }
+        </style>
+        <div class="遮罩" id="遮罩"></div>
+        <div class="日志容器" id="日志容器">
+            <div class="标题区域">
+                <select id="查看数据下拉框">
+                    ${Object.keys(数据选项对象).map(key => `<option value="${key}">${key}</option>`).join(``)}
+                </select>
             </div>
-            `;
+            <div class="滚动区域">
+                <textarea class="日志区域" id="文本区域" readonly></textarea>
+            </div>
+            <div class="按钮区域">
+                <span class="数据条数" id="数据条数"></span>
+                <button id="显示全部按钮">显示全部</button>
+                <button id="仅显示✅按钮">仅显示✅</button>
+                <button id="仅显示🖱️按钮">仅显示🖱️</button>
+                <button id="仅显示❌按钮">仅显示❌</button>
+                <button id="仅显示⚠️按钮">仅显示⚠️</button>
+                <button id="清空按钮">清空</button>
+                <button id="复制按钮">复制</button>
+                <button id="关闭按钮">关闭</button>
+            </div>
+        </div>
+        `;
 
         刷新文本区域函数();
         document.body.appendChild(日志弹窗);
@@ -1361,6 +1362,8 @@ function 更新菜单函数() {
         });
         日志弹窗.querySelector(`#复制按钮`).addEventListener(`click`, () => {
             GM_setClipboard(日志弹窗.querySelector(`#文本区域`).value);
+            记录日志函数(`✅ 已复制到剪切板`, `日志`);
+
             let 复制按钮 = 日志弹窗.querySelector(`#复制按钮`);
             let 原文本 = 复制按钮.textContent;
             复制按钮.textContent = `已复制`;
@@ -1375,35 +1378,36 @@ function 暂停运行函数() {
     GM_setValue(`是否暂停运行`, 是否暂停运行);
     let 按钮弹窗 = document.createElement(`div`);
     按钮弹窗.innerHTML = `
-        <style>
-            #继续按钮 {
-                position: fixed;                          // 固定定位，位置相对于浏览器窗口
-                top: ${继续按钮坐标数组[0]}%;              // 设置垂直位置
-                left: ${继续按钮坐标数组[1]}%;             // 设置水平位置
-                transform: translate(-50%, -50%);         // 设置轴心到中点
-                z-index: 9999;                            // 设置层级
-                padding: 12px 22px;                       // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
-                font-size: 15px;                          // 设置字体大小
-                color: white;                             // 设置文字颜色
-                background-color: #007bff;              // 设置背景颜色
-                border: none;                             // 设置无边框
-                border-radius: 6px;                       // 设置边框圆角半径
-                cursor: pointer;                          // 设置鼠标光标样式（手形指针）
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);  // 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色）
-                transition: background-color 0.2s;        // 设置背景颜色过渡持续时间
-            }
-            // 按钮悬停效果
-            #继续按钮:hover {
-                background-color: #0056b3; // 设置悬停时按钮背景颜色
-            }
-        </style>
-        <button id="继续按钮">继续</button>
-        `;
+    <style>
+        #继续按钮 {
+            position: fixed;                         /* 固定定位，位置相对于浏览器窗口 */
+            top: ${继续按钮坐标数组[0]}%;              /* 设置垂直位置 */
+            left: ${继续按钮坐标数组[1]}%;             /* 设置水平位置 */
+            transform: translate(-50%, -50%);         /* 设置轴心到中点 */
+            z-index: 9999;                            /* 设置层级 */
+            padding: 12px 22px;                       /* 设置内边距（上下、左右）（上、左右、下）（上、右、下、左） */
+            font-size: 15px;                          /* 设置字体大小 */
+            color: white;                             /* 设置文字颜色 */
+            background-color: #007bff;              /* 设置背景颜色 */
+            border: none;                             /* 设置无边框 */
+            border-radius: 6px;                       /* 设置边框圆角半径 */
+            cursor: pointer;                          /* 设置鼠标光标样式（手形指针） */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);  /* 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色） */
+            transition: background-color 0.2s;        /* 设置背景颜色过渡持续时间 */
+        }
+        /* 按钮悬停效果 */
+        #继续按钮:hover {
+            background-color: #0056b3;      /* 设置悬停时按钮背景颜色 */
+        }
+    </style>
+    <button id="继续按钮">继续</button>
+    `;
     document.body.appendChild(按钮弹窗);
     按钮弹窗.querySelector(`#继续按钮`).addEventListener(`click`, () => {
         是否暂停运行 = false;
         GM_setValue(`是否暂停运行`, 是否暂停运行);
         按钮弹窗.remove();
+        记录日志函数(`✅ 继续运行`, `日志`);
     });
 }
 
