@@ -177,7 +177,7 @@ function 查找网页元素函数(目标文档参数, 执行步骤参数) {
 
     if (执行步骤参数.选择器) {
         return 目标文档参数.querySelector(执行步骤参数.选择器);
-        //return 目标文档.querySelectorAll(步骤.选择器)[0];
+        // return 目标文档.querySelectorAll(步骤.选择器)[0];
     }
     else if (执行步骤参数.类名称) {
         return 目标文档参数.getElementsByClassName(执行步骤参数.类名称)[0];
@@ -247,8 +247,7 @@ function 递归搜索Iframe函数(目标文档参数, 元素配置参数) {
 function 查找所有Iframe函数(目标文档参数) {
     let 所有Iframe数组 = [];
 
-    function 递归查找所有Iframe函数(目标文档参数)
-    {
+    function 递归查找所有Iframe函数(目标文档参数) {
         let Iframe数组 = 目标文档参数.querySelectorAll(`iframe`);
         Iframe数组.forEach(iframe => 所有Iframe数组.push(iframe));
         for (let iframe of Iframe数组) {
@@ -402,14 +401,14 @@ function 操作网页元素函数(目标元素参数, 元素配置参数) {
                 else {
                     值列表 = 元素配置参数.值.split(`,`).map(v => v.trim());
                 }
-                //标准下拉框
+                // 标准下拉框
                 if (目标元素参数.tagName === `SELECT`) {
-                    //多选
+                    // 多选
                     if (目标元素参数.multiple) {
                         // 多选脚本：清除所有选项后按值列表选中
                         Array.from(目标元素参数.options).forEach(option => { option.selected = 值列表.includes(option.value) || 值列表.includes(option.textContent.trim()); });
                     }
-                    //单选
+                    // 单选
                     else {
                         // 单选脚本：取第一个有效值
                         let 有效值 = 值列表.find(v => Array.from(目标元素参数.options).some(opt => opt.value === v || opt.textContent.trim() === v));
@@ -968,7 +967,7 @@ function 导入数据数组函数(数组对象参数, 文本数据参数) {
                 数组对象参数[数组名称].push(数据数组[数据索引].trim());
                 数据索引++;
             });
-            //记录日志函数(`✅ 成功导入：\n${数据数组.slice(0, 数据数组.length).join(`\n`)}`, `日志`);
+            // 记录日志函数(`✅ 成功导入：\n${数据数组.slice(0, 数据数组.length).join(`\n`)}`, `日志`);
         }
         else {
             let 数据索引 = 0;
@@ -981,7 +980,7 @@ function 导入数据数组函数(数组对象参数, 文本数据参数) {
                     数组对象参数[数组名称].push(``);
                 }
             });
-            //记录日志函数(`✅ 成功导入：\n${数据数组.slice(0, 数据数组.length).join(`\n`)}`, `告警`);
+            // 记录日志函数(`✅ 成功导入：\n${数据数组.slice(0, 数据数组.length).join(`\n`)}`, `告警`);
         }
     });
     记录日志函数(`✅ 成功导入 ${Object.values(数组对象参数)[0].length} 条数据`, `日志`);
@@ -989,7 +988,7 @@ function 导入数据数组函数(数组对象参数, 文本数据参数) {
     GM_setValue(`脚本循环次数`, 脚本循环次数);
 }
 
-function 获取配置信息函数(数组对象参数){
+function 获取配置信息函数(数组对象参数) {
     let 配置信息 = ``;
     Object.keys(数组对象参数).forEach(数组名称 => {
         配置信息 += 数组名称.replaceAll(`数组`, ``) + `\t`;
@@ -1028,65 +1027,62 @@ function 更新菜单函数() {
         日志弹窗.innerHTML = `
             <style>
                 .遮罩 {
-                    position: fixed; /* 固定定位，相对于视口 */
-                    top: 0; /* 顶部对齐 */
-                    left: 0; /* 左侧对齐 */
-                    width: 100%; /* 设置宽度占比 */
-                    height: 100%; /* 设置高度占比 */
-                    background: rgba(0,0,0,0.1); /* 设置背景颜色，半透明黑色背景 */
-                    z-index: 9998; /* 层级低于主容器但高于页面内容 */
+                    position: fixed;                 // 固定定位，位置相对于浏览器窗口
+                    top: 0; left: 0;                 // 设置垂直位置、设置水平位置
+                    width: 100%; height: 100%;       // 设置宽度占比、设置高度占比
+                    background: rgba(0,0,0,0.1);   // 设置背景颜色
+                    z-index: 9998;                   // 设置层级
                 }
                 .日志容器 {
-                    position: fixed; /* 固定定位 */
-                    top: 20%; left: 20%; /* 距离顶部和左侧各20% */
-                    width: 60%; height: 60%; /* 宽高各占60%视口 */
-                    z-index: 9999; /* 最高层级，确保显示在最前 */
-                    background: white; /* 设置背景颜色 */
-                    border: 2px solid #333; /* 深灰色边框 */
-                    padding: 10px; /* 内边距10px */
-                    box-shadow: 0 0 20px #000; /* 黑色阴影效果 */
-                    display: flex; /* 启用Flex布局 */
-                    flex-direction: column; /* 垂直排列子元素 */
+                    position: fixed;             // 固定定位，位置相对于浏览器窗口
+                    top: 20%; left: 20%;         // 设置垂直位置、设置水平位置
+                    width: 60%; height: 60%;     // 设置宽度占比、设置高度占比
+                    z-index: 9999;               // 设置层级
+                    background: white;           // 设置背景颜色
+                    border: 2px solid #333;    // 设置边框（宽度、样式、颜色）
+                    padding: 10px;               // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    box-shadow: 0 0 20px #000; // 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色）
+                    display: flex;               // 启用Flex布局（弹性）
+                    flex-direction: column;      // 垂直排列子元素
                 }
                 .标题 {
-                    padding-bottom: 10px; /* 底部内边距，与下方内容分隔 */
-                    border-bottom: 1px solid #eee; /* 浅灰色底部分隔线 */
+                    padding-bottom: 10px;             // 设置下内边距
+                    border-bottom: 1px solid #eee;  // 设置底部边框（宽度、样式、颜色）
                 }
                 .滚动区域 {
-                    flex: 1; /* 占据父容器剩余所有空间 */
-                    min-height: 50px; /* 最小高度限制 */
-                    overflow: hidden; /* 隐藏滚动条 */
-                    display: flex; /* 启用Flex布局使两个textarea并排 */
+                    flex: 1;            // 设置可以扩展并占据剩余空间
+                    min-height: 50px;   // 设置最小高度
+                    overflow: hidden;   // 隐藏滚动条
+                    display: flex;      // 启用Flex布局（弹性）
                 }
                 .日志区域 {
-                    width: 100%; /* 每个占100%宽度 */
-                    height: 100%; /* 高度填满父容器 */
-                    box-sizing: border-box; /* 盒模型包含边框和内边距 */
-                    resize: none; /* 禁止用户手动调整大小 */
-                    font-size: 14px; /* 设置字体大小 */
-                    line-height: 1.5; /* 设置行高 */
+                    width: 100%; height: 100%;  // 设置宽度占比、设置高度占比
+                    box-sizing: border-box;     // 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距）
+                    resize: none;               // 禁止用户调整大小
+                    font-size: 14px;            // 设置字体大小
+                    line-height: 1.5;           // 设置行高
                 }
                 .按钮区域 {
-                    display: flex; /* 弹性布局 */
-                    gap: 10px; /* 按钮间距 */
-                    padding: 10px 0 0; /* 内边距 */
-                    border-top: 1px solid #ddd; /* 上边框 */
+                    display: flex;                 // 启用Flex布局（弹性）
+                    gap: 10px;                     // 设置容器内子元素间距
+                    padding: 10px 0 0;             // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    border-top: 1px solid #ddd;  // 设置顶部边框（宽度、样式、颜色）
                 }
                 .按钮区域 button {
-                    border: 1px solid #ccc; /* 浅灰色边框 */
-                    padding: 6px 12px; /* 内边距 */
-                    border-radius: 4px; /* 圆角边框 */
-                    background: white; /* 白色背景 */
-                    cursor: pointer; /* 鼠标手型指针 */
-                    transition: all 0.2s; /* 所有属性变化过渡0.2秒 */
+                    border: 1px solid #ccc;   // 设置边框（宽度、样式、颜色）
+                    padding: 6px 12px;          // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    border-radius: 4px;         // 设置边框圆角半径
+                    background: white;          // 设置背景颜色
+                    cursor: pointer;            // 设置鼠标光标样式（手形指针）
+                    transition: all 0.2s;       // 设置过渡持续时间
                 }
-                /* 按钮悬停效果 */
+                // 按钮悬停效果
                 .按钮区域 button:hover {
-                    border-color: #007bff; /* 边框变蓝色 */
+                    border-color: #007bff;    //设置边框颜色
                 }
-                /* 按钮点击效果 */
+                // 按钮点击效果
                 .按钮区域 button:active {
-                    background-color: #f0f0f0; /* 点击时背景变浅灰 */
+                    background-color: #f0f0f0; // 设置背景颜色
                 }
             </style>
             <div class="遮罩" id="遮罩"></div>
@@ -1125,8 +1121,7 @@ function 更新菜单函数() {
                 GM_setValue(`实时执行定时器`, 实时执行定时器);
                 记录日志函数(`⏱ 已启动实时执行定时器，${实时执行定时器间隔时间}秒/次`, `日志`);
             }
-            else
-            {
+            else {
                 clearInterval(实时执行定时器);
                 实时执行定时器 = null;
                 GM_setValue(`实时执行定时器`, 实时执行定时器);
@@ -1136,8 +1131,7 @@ function 更新菜单函数() {
         });
         日志弹窗.querySelector(`#设置总线程数按钮`).addEventListener(`click`, () => {
             let 输入数据 = prompt(`设置【总线程数】`, ``);
-            if(!输入数据)
-            {
+            if (!输入数据) {
                 记录日志函数(`⚠️ 取消设置【总线程数】`, `告警`);
                 return;
             }
@@ -1154,8 +1148,7 @@ function 更新菜单函数() {
         });
         日志弹窗.querySelector(`#设置实时执行定时器间隔时间按钮`).addEventListener(`click`, () => {
             let 输入数据 = prompt(`设置【实时执行定时器间隔时间】`, ``);
-            if(!输入数据)
-            {
+            if (!输入数据) {
                 记录日志函数(`⚠️ 取消设置【实时执行定时器间隔时间】`, `告警`);
                 return;
             }
@@ -1211,83 +1204,83 @@ function 更新菜单函数() {
         日志弹窗.innerHTML = `
             <style>
                 .遮罩 {
-                    position: fixed;
-                    top: 0; left: 0;
-                    width: 100%; height: 100%;
-                    background: rgba(0,0,0,0.1);
-                    z-index: 9998;
+                    position: fixed;               // 固定定位，位置相对于浏览器窗口
+                    top: 0; left: 0;               // 设置垂直位置、设置水平位置
+                    width: 100%; height: 100%;     // 设置宽度占比、设置高度占比
+                    background: rgba(0,0,0,0.1); // 设置背景颜色
+                    z-index: 9998;                 // 设置层级
                 }
                 .日志容器 {
-                    position: fixed;
-                    top: 10%; left: 10%;
-                    width: 80%; height: 80%;
-                    z-index: 9999;
-                    background: white;
-                    border: 2px solid #333;
-                    padding: 20px;
-                    box-shadow: 0 0 20px #000;
-                    display: flex;
-                    flex-direction: column;
-                    border-radius: 8px;
+                    position: fixed;             // 固定定位，位置相对于浏览器窗口
+                    top: 10%; left: 10%;         // 设置垂直位置、设置水平位置
+                    width: 80%; height: 80%;     // 设置宽度占比、设置高度占比
+                    z-index: 9999;               // 设置层级
+                    background: white;           // 设置背景颜色
+                    border: 2px solid #333;    // 设置边框（宽度、样式、颜色）
+                    padding: 20px;               // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    box-shadow: 0 0 20px #000; // 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色）
+                    display: flex;               // 启用Flex布局（弹性）
+                    flex-direction: column;      // 垂直排列子元素
+                    border-radius: 8px;          // 设置边框圆角半径
                 }
                 .标题区域 {
-                    display: flex;
-                    justify-content: center;
-                    margin-bottom: 15px;
+                    display: flex;            // 启用Flex布局（弹性）
+                    justify-content: center;  // 设置对齐方式（水平居中）
+                    margin-bottom: 15px;      // 下外边距
                 }
                 #查看数据下拉框 {
-                    padding: 12px 15px; /* 设置内边距 */
-                    border: 1px solid #ccc;
-                    border-radius: 6px;
-                    font-size: 20px; /* 设置字体大小 */
-                    width: 100%; /* 改为100%宽度与文本区域一致 */
-                    height: auto;
-                    background-color: #f9f9f9;
-                    box-sizing: border-box; /* 确保宽度计算包含内边距和边框 */
+                    padding: 12px 15px;           // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    border: 1px solid #ccc;     // 设置边框（宽度、样式、颜色）
+                    border-radius: 6px;           // 设置边框圆角半径
+                    font-size: 20px;              // 设置字体大小
+                    width: 100%;                  // 设置宽度占比
+                    height: auto;                 // 高度自适应
+                    background-color: #f9f9f9;  // 设置背景颜色
+                    box-sizing: border-box;       // 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距）
                 }
                 .滚动区域 {
-                    flex: 1;
-                    overflow: hidden;
-                    margin-bottom: 15px;
+                    flex: 1;                 // 设置可以扩展并占据剩余空间
+                    overflow: hidden;        // 隐藏滚动条
+                    margin-bottom: 15px;     // 下外边距
                 }
                 .日志区域 {
-                    width: 100%;
-                    height: 100%;
-                    box-sizing: border-box;
-                    resize: none;
-                    padding: 12px;
-                    border: 1px solid #ddd;
-                    border-radius: 4px;
-                    font-family: monospace;
-                    font-size: 15px; /* 设置字体大小 */
-                    line-height: 1.5; /* 设置行高 */
+                    width: 100%; height: 100%;  // 设置宽度占比、设置高度占比
+                    box-sizing: border-box;     // 设置计算元素总宽度和总高度的方式（border-box包含边框和内边距）
+                    resize: none;               // 禁止用户调整大小
+                    padding: 12px;              // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    border: 1px solid #ddd;   // 设置边框（宽度、样式、颜色）
+                    border-radius: 4px;         // 设置边框圆角半径
+                    font-family: monospace;     // 设置字体
+                    font-size: 15px;            // 设置字体大小
+                    line-height: 1.5;           // 设置行高
                 }
                 .按钮区域 {
-                    display: flex;
-                    justify-content: flex-end;
-                    gap: 10px;
+                    display: flex;              // 启用Flex布局（弹性）
+                    justify-content: flex-end;  // 设置对齐方式（靠右对齐）
+                    gap: 10px;                  // 设置容器内子元素间距
                 }
                 .数据条数 {
-                    margin-right: auto; /* 将计数信息推到左侧 */
-                    padding: 8px 12px;
-                    border: 1px solid #ddd; /* 可选边框，与按钮风格协调 */
-                    border-radius: 4px;
-                    background-color: #f8f9fa; /* 浅灰色背景 */
-                    font-size: 20px;
-                    color: #666;
+                    margin-right: auto;          // 设置元素右侧外边距为自动
+                    padding: 8px 12px;           // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    border: 1px solid #ddd;    // 设置边框（宽度、样式、颜色）
+                    border-radius: 4px;          // 设置边框圆角半径
+                    background-color: #f8f9fa; // 设置背景颜色
+                    font-size: 20px;             // 设置字体大小
+                    color: #666;               // 设置字体颜色
                 }
                 .按钮区域 button {
-                    border: 1px solid #ccc;
-                    padding: 10px 18px; /* 稍微增大按钮尺寸 */
-                    border-radius: 4px;
-                    background: white;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    font-size: 14px; /* 设置按钮字体大小 */
+                    border: 1px solid #ccc; // 设置边框（宽度、样式、颜色）
+                    padding: 10px 18px;       // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                    border-radius: 4px;       // 设置边框圆角半径
+                    background: white;        // 设置背景颜色
+                    cursor: pointer;          // 设置鼠标光标样式（手形指针）
+                    transition: all 0.2s;     // 设置过渡持续时间
+                    font-size: 14px;          // 设置字体大小
                 }
+                // 按钮悬停效果
                 .按钮区域 button:hover {
-                    background-color: #f0f0f0;
-                    border-color: #999;
+                    background-color: #f0f0f0; // 设置背景颜色
+                    border-color: #999;        // 设置边框颜色
                 }
             </style>
             <div class="遮罩" id="遮罩"></div>
@@ -1384,23 +1377,24 @@ function 暂停运行函数() {
     按钮弹窗.innerHTML = `
         <style>
             #继续按钮 {
-                position: fixed;
-                top: ${继续按钮坐标数组[0]}%;
-                left: ${继续按钮坐标数组[1]}%;
-                transform: translate(-50%, -50%); /* 确保按钮中心点对准75%位置 */
-                z-index: 9999;
-                padding: 12px 22px;
-                font-size: 15px;
-                color: white;
-                background-color: #007bff;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                transition: background-color 0.2s;
+                position: fixed;                          // 固定定位，位置相对于浏览器窗口
+                top: ${继续按钮坐标数组[0]}%;              // 设置垂直位置
+                left: ${继续按钮坐标数组[1]}%;             // 设置水平位置
+                transform: translate(-50%, -50%);         // 设置轴心到中点
+                z-index: 9999;                            // 设置层级
+                padding: 12px 22px;                       // 设置内边距（上下、左右）（上、左右、下）（上、右、下、左）
+                font-size: 15px;                          // 设置字体大小
+                color: white;                             // 设置文字颜色
+                background-color: #007bff;              // 设置背景颜色
+                border: none;                             // 设置无边框
+                border-radius: 6px;                       // 设置边框圆角半径
+                cursor: pointer;                          // 设置鼠标光标样式（手形指针）
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);  // 添加阴影（水平偏移、垂直偏移、模糊、阴影颜色）
+                transition: background-color 0.2s;        // 设置背景颜色过渡持续时间
             }
+            // 按钮悬停效果
             #继续按钮:hover {
-                background-color: #0056b3;
+                background-color: #0056b3; // 设置悬停时按钮背景颜色
             }
         </style>
         <button id="继续按钮">继续</button>
@@ -1521,7 +1515,7 @@ function 停止流程函数() {
     更新菜单函数();
 }
 
-function 格式化时间函数(时间参数)//将时间格式化为YYYY-MM-DD字符串
+function 格式化时间函数(时间参数)// 将时间格式化为YYYY-MM-DD字符串
 {
     时间参数 = String(时间参数);
     if (时间参数.includes(`年`) || 时间参数.includes(`月`) || 时间参数.includes(`日`)) {
@@ -1591,7 +1585,7 @@ function 转换时间函数(时间参数, 基准时间 = new Date()) {
     let 匹配标准格式 = 时间参数.match(/^\d{4}-\d{2}-\d{2}$/);
     if (匹配标准格式) return 时间参数;
 
-    //无法识别的格式返回原字符串
+    // 无法识别的格式返回原字符串
     return 时间参数;
 }
 
@@ -1652,9 +1646,8 @@ window.addEventListener(`load`, () => {
 });
 
 window.按下键数组 = [];
-document.addEventListener(`keydown`, function(event) {
-    if(!按下键数组.includes(event.key.toString().toLowerCase()))
-    {
+document.addEventListener(`keydown`, function (event) {
+    if (!按下键数组.includes(event.key.toString().toLowerCase())) {
         按下键数组.push(event.key.toString().toLowerCase());
     }
     if (按下键数组.includes(`s`) && 按下键数组.includes(`x`) && 按下键数组.length == 2) {
@@ -1664,6 +1657,6 @@ document.addEventListener(`keydown`, function(event) {
     }
 });
 
-document.addEventListener(`keyup`, function(event) {
+document.addEventListener(`keyup`, function (event) {
     按下键数组.length = 0;
 });
