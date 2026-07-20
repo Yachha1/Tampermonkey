@@ -1,6 +1,7 @@
 window.菜单ID数组 = GM_getValue(`菜单ID数组`, []);
 window.网站地址数组 = GM_getValue(`网站地址数组`, []);
 window.请求情况数组 = GM_getValue(`请求情况数组`, []);
+window.检索结果数组 = GM_getValue(`检索结果数组`, []);
 window.日志记录数组 = GM_getValue(`日志记录数组`, []);
 window.报错记录数组 = GM_getValue(`报错记录数组`, []);
 window.当前脚本名称 = GM_getValue(`当前脚本名称`, ``);
@@ -28,7 +29,6 @@ window.是否结束等待执行操作 = GM_getValue(`是否结束等待执行操
 window.是否开启实时执行定时器 = GM_getValue(`是否开启实时执行定时器`, false);
 window.是否已打开网址 = false;
 window.当前批量打开网址脚本名称 = GM_getValue(`当前批量打开网址脚本名称`, ``);
-window.检索结果数组 = GM_getValue(`检索结果数组`, []);
 
 function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数) {
     let 进度索引 = 0;
