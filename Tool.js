@@ -26,6 +26,9 @@ window.是否重新执行操作 = GM_getValue(`是否重新执行操作`, false)
 window.是否跳过获取循环次数 = GM_getValue(`是否跳过获取循环次数`, false);
 window.是否结束等待执行操作 = GM_getValue(`是否结束等待执行操作`, false);
 window.是否开启实时执行定时器 = GM_getValue(`是否开启实时执行定时器`, false);
+window.是否已打开网址 = false;
+window.当前批量打开网址脚本名称 = GM_getValue(`当前批量打开网址脚本名称`, ``);
+window.检索结果数组 = GM_getValue(`检索结果数组`, []);
 
 function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数) {
     let 进度索引 = 0;
@@ -919,6 +922,60 @@ function 修改当前步骤ID函数(步骤ID参数, 等待时间参数) {
     是否结束等待执行操作 = false;
     GM_setValue(`是否结束等待执行操作`, 是否结束等待执行操作);
     重新执行操作等待时间 = 等待时间参数;
+}
+
+function 批量打开网址等待网页稳定函数(脚本名称参数, 等待时间参数, 加载完成条件函数, 执行函数, 结束函数)//等待时间参数 注意有的网页一直在变动的（把 等待网页稳定时间 改为 <= 0）
+{
+    是否已打开网址 = true;
+    let 最后改变时间 = Date.now();
+    let DOM变动监视器 = new MutationObserver(() => {
+        最后改变时间 = Date.now();// 每次有变化就更新时间
+    });
+    // 观察整个body的变化
+    DOM变动监视器.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        characterData: true
+    });
+
+    let 等待定时器 = setInterval(() => {
+        let 当前时间 = Date.now();
+        let 是否满足通用加载完成条件 = true;
+        if ((网站地址数组[当前循环次数].startsWith(`http://mp.weixin.qq.com/`) || 网站地址数组[当前循环次数].startsWith(`https://mp.weixin.qq.com/`))
+            && !document.body.textContent.includes(`该内容已被发布者删除`)
+            && !document.body.textContent.includes(`该内容暂时无法查看`)
+            && !document.body.textContent.includes(`当前环境异常，完成验证后即可继续访问`)
+            && !document.body.textContent.includes(`年`)) {
+            是否满足通用加载完成条件 = false;
+        }
+        if ((当前时间 - 最后改变时间 >= 等待时间参数) && 是否满足通用加载完成条件 && 加载完成条件函数())// 等待网页稳定时间内没有变化，认为页面已稳定（不会检测动态加载的内容）
+        {
+            clearInterval(等待定时器);
+            DOM变动监视器.disconnect();
+
+            执行函数();
+
+            记录日志函数(`✅ 进度：${当前循环次数 + 1}/${网站地址数组.length}`, `日志`);
+            if (当前循环次数 + 1 < 网站地址数组.length) {
+                当前循环次数++;
+                GM_setValue(`当前循环次数`, 当前循环次数);
+                window.location.href = 网站地址数组[当前循环次数];
+                记录日志函数(`✅ 打开网页：${网站地址数组[当前循环次数]}`, `日志`);
+            }
+            else {
+                当前批量打开网址脚本名称 = ``;
+                GM_setValue(`当前批量打开网址脚本名称`, 当前批量打开网址脚本名称);
+                记录日志函数(`⏹️ 停止【批量打开网址】`, `日志`);
+                结束函数();
+                更新菜单函数();
+            }
+        }
+        else if (当前批量打开网址脚本名称 != 脚本名称参数) {
+            clearInterval(等待定时器);
+            DOM变动监视器.disconnect();
+        }
+    }, 100);
 }
 
 function 检索唯一字符串函数(原字符串参数, 左字符串参数, 右字符串参数) {
