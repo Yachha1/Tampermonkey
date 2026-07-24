@@ -256,7 +256,7 @@ function 查找所有Iframe函数(目标文档参数) {
         for (let iframe of Iframe数组) {
             try {
                 let 目标文档 = iframe.contentDocument || iframe.contentWindow.document;
-                递归查找所有Iframe函数(目标文档)
+                递归查找所有Iframe函数(目标文档);
             }
             catch (e) {
                 记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
