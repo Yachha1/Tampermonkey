@@ -880,12 +880,12 @@ function 执行步骤操作函数() {
         }
         else {
             let 最后改变时间 = Date.now();
-            let DOM变动监视器 = new MutationObserver(() => {
+            let DOM变动观察器 = new MutationObserver(() => {
                 最后改变时间 = Date.now(); // 每次有变化就更新时间
             });
 
             // 观察整个body的变化
-            DOM变动监视器.observe(document.body, {
+            DOM变动观察器.observe(document.body, {
                 childList: true,
                 subtree: true,
                 attributes: true,
@@ -897,7 +897,7 @@ function 执行步骤操作函数() {
                 // 等待网页稳定时间内没有变化，认为页面已稳定（不会检测动态加载的内容）
                 if ((当前时间 - 最后改变时间 > 等待网页稳定时间 + (配置对象[当前脚本名称]?.步骤[当前步骤ID]?.等待网页稳定时间 ?? 0) && 页面稳定条件函数()) || !是否正在运行) {
                     clearInterval(等待定时器);
-                    DOM变动监视器.disconnect();
+                    DOM变动观察器.disconnect();
                     回调函数();
                 }
             }, 100);
@@ -928,11 +928,11 @@ function 批量打开网址等待网页稳定函数(脚本名称参数, 等待�
 {
     是否已打开网址 = true;
     let 最后改变时间 = Date.now();
-    let DOM变动监视器 = new MutationObserver(() => {
+    let DOM变动观察器 = new MutationObserver(() => {
         最后改变时间 = Date.now();// 每次有变化就更新时间
     });
     // 观察整个body的变化
-    DOM变动监视器.observe(document.body, {
+    DOM变动观察器.observe(document.body, {
         childList: true,
         subtree: true,
         attributes: true,
@@ -952,7 +952,7 @@ function 批量打开网址等待网页稳定函数(脚本名称参数, 等待�
         if ((当前时间 - 最后改变时间 >= 等待时间参数) && 是否满足通用加载完成条件 && 加载完成条件函数())// 等待网页稳定时间内没有变化，认为页面已稳定（不会检测动态加载的内容）
         {
             clearInterval(等待定时器);
-            DOM变动监视器.disconnect();
+            DOM变动观察器.disconnect();
 
             执行函数();
 
@@ -973,7 +973,7 @@ function 批量打开网址等待网页稳定函数(脚本名称参数, 等待�
         }
         else if (当前批量打开网址脚本名称 != 脚本名称参数) {
             clearInterval(等待定时器);
-            DOM变动监视器.disconnect();
+            DOM变动观察器.disconnect();
         }
     }, 100);
 }
