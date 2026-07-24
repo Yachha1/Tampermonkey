@@ -29,6 +29,7 @@ window.是否结束等待执行操作 = GM_getValue(`是否结束等待执行操
 window.是否开启实时执行定时器 = GM_getValue(`是否开启实时执行定时器`, false);
 window.是否已打开网址 = false;
 window.当前批量打开网址脚本名称 = GM_getValue(`当前批量打开网址脚本名称`, ``);
+window.按下键数组 = [];
 
 function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数) {
     let 进度索引 = 0;
@@ -166,7 +167,7 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
 }
 
 function 查找网页元素函数(目标文档参数, 执行步骤参数) {
-    let iframe元素 = 递归搜索Iframe函数(目标文档参数, 执行步骤参数);
+    let iframe元素 = 递归搜索Iframe元素函数(目标文档参数, 执行步骤参数);
     // 切换到iframe文档
     if (iframe元素) {
         try {
@@ -205,22 +206,22 @@ function 查找网页元素函数(目标文档参数, 执行步骤参数) {
     }
 }
 
-function 递归搜索Iframe函数(目标文档参数, 元素配置参数) {
-    let Iframe数组 = 目标文档参数.querySelectorAll(`iframe`);
+function 递归搜索Iframe元素函数(目标文档参数, 元素配置参数) {
+    let Iframe元素数组 = 目标文档参数.querySelectorAll(`iframe`);
 
     if (元素配置参数.IframeID) {
-        for (let iframe of Iframe数组) {
+        for (let iframe元素 of Iframe元素数组) {
             if (元素配置参数?.是否模糊查询Iframe) {
-                if (iframe.id.includes(元素配置参数.IframeID)) return iframe;
+                if (iframe元素.id.includes(元素配置参数.IframeID)) return iframe元素;
             }
             else {
-                if (iframe.id == 元素配置参数.IframeID) return iframe;
+                if (iframe元素.id == 元素配置参数.IframeID) return iframe元素;
             }
         }
-        for (let iframe of Iframe数组) {
+        for (let iframe元素 of Iframe元素数组) {
             try {
-                let 目标文档 = iframe.contentDocument || iframe.contentWindow.document;
-                let 目标Iframe = 递归搜索Iframe函数(目标文档, 元素配置参数);
+                let 目标文档 = iframe元素.contentDocument || iframe元素.contentWindow.document;
+                let 目标Iframe = 递归搜索Iframe元素函数(目标文档, 元素配置参数);
                 if (目标Iframe) return 目标Iframe;
             }
             catch (e) {
@@ -229,13 +230,13 @@ function 递归搜索Iframe函数(目标文档参数, 元素配置参数) {
         }
     }
     else if (元素配置参数.IframeSRC) {
-        for (let iframe of Iframe数组) {
-            if (iframe.src.includes(元素配置参数.IframeSRC)) return iframe;
+        for (let iframe元素 of Iframe元素数组) {
+            if (iframe元素.src.includes(元素配置参数.IframeSRC)) return iframe元素;
         }
-        for (let iframe of Iframe数组) {
+        for (let iframe元素 of Iframe元素数组) {
             try {
-                let 目标文档 = iframe.contentDocument || iframe.contentWindow.document;
-                let 目标Iframe = 递归搜索Iframe函数(目标文档, 元素配置参数);
+                let 目标文档 = iframe元素.contentDocument || iframe元素.contentWindow.document;
+                let 目标Iframe = 递归搜索Iframe元素函数(目标文档, 元素配置参数);
                 if (目标Iframe) return 目标Iframe;
             }
             catch (e) {
@@ -247,16 +248,16 @@ function 递归搜索Iframe函数(目标文档参数, 元素配置参数) {
     return null;
 }
 
-function 查找所有Iframe函数(目标文档参数) {
-    let 所有Iframe数组 = [];
+function 查找所有Iframe元素函数(目标文档参数) {
+    let 所有Iframe元素数组 = [];
 
-    function 递归查找所有Iframe函数(目标文档参数) {
+    function 递归查找所有Iframe元素函数(目标文档参数) {
         let Iframe数组 = 目标文档参数.querySelectorAll(`iframe`);
-        Iframe数组.forEach(iframe => 所有Iframe数组.push(iframe));
-        for (let iframe of Iframe数组) {
+        Iframe数组.forEach(iframe => 所有Iframe元素数组.push(iframe));
+        for (let iframe元素 of Iframe数组) {
             try {
-                let 目标文档 = iframe.contentDocument || iframe.contentWindow.document;
-                递归查找所有Iframe函数(目标文档);
+                let 目标文档 = iframe元素.contentDocument || iframe元素.contentWindow.document;
+                递归查找所有Iframe元素函数(目标文档);
             }
             catch (e) {
                 记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
@@ -264,9 +265,31 @@ function 查找所有Iframe函数(目标文档参数) {
         }
     }
 
-    递归查找所有Iframe函数(目标文档参数);
+    递归查找所有Iframe元素函数(目标文档参数);
 
-    return 所有Iframe数组;
+    return 所有Iframe元素数组;
+}
+
+function 查找所有Iframe文档函数(目标文档参数) {
+    let 所有Iframe文档数组 = [];
+
+    function 递归查找所有Iframe文档函数(目标文档参数) {
+        let Iframe元素数组 = 目标文档参数.querySelectorAll(`iframe`);
+        for (let iframe元素 of Iframe元素数组) {
+            try {
+                let 目标文档 = iframe元素?.contentDocument || iframe元素?.contentWindow?.document;
+                所有Iframe文档数组.push(目标文档);
+                递归查找所有Iframe文档函数(目标文档);
+            }
+            catch (e) {
+                记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
+            }
+        }
+    }
+
+    递归查找所有Iframe文档函数(目标文档参数);
+
+    return 所有Iframe文档数组;
 }
 
 function 操作网页元素函数(目标元素参数, 元素配置参数) {
@@ -924,8 +947,8 @@ function 修改当前步骤ID函数(步骤ID参数, 等待时间参数) {
     重新执行操作等待时间 = 等待时间参数;
 }
 
-function 批量打开网址等待网页稳定函数(脚本名称参数, 等待时间参数, 加载完成条件函数, 执行函数, 结束函数)//等待时间参数 注意有的网页一直在变动的（把 等待网页稳定时间 改为 <= 0）
-{
+//等待时间参数 注意有的网页一直在变动的（把 等待网页稳定时间 改为 <= 0）
+function 批量打开网址等待网页稳定函数(脚本名称参数, 等待时间参数, 加载完成条件函数, 执行函数, 结束函数) {
     是否已打开网址 = true;
     let 最后改变时间 = Date.now();
     let DOM变动观察器 = new MutationObserver(() => {
@@ -1576,8 +1599,8 @@ function 停止流程函数() {
     更新菜单函数();
 }
 
-function 格式化时间函数(时间参数)// 将时间格式化为YYYY-MM-DD字符串
-{
+// 将时间格式化为YYYY-MM-DD字符串
+function 格式化时间函数(时间参数) {
     时间参数 = String(时间参数);
     if (时间参数.includes(`年`) || 时间参数.includes(`月`) || 时间参数.includes(`日`)) {
         时间参数 = 时间参数.replaceAll(`年`, `/`).replaceAll(`月`, `/`).replaceAll(`日`, `/`);
@@ -1692,6 +1715,8 @@ function 初始化函数() {
         GM_setValue(`实时执行定时器`, 实时执行定时器);
         记录日志函数(`⏱ 已启动实时执行定时器，${实时执行定时器间隔时间}秒/次`, `日志`);
     }
+
+    自定义初始化函数();
 }
 
 window.addEventListener(`load`, () => {
@@ -1706,7 +1731,6 @@ window.addEventListener(`load`, () => {
     }
 });
 
-window.按下键数组 = [];
 document.addEventListener(`keydown`, function (event) {
     if (event.key && !按下键数组.includes(event.key.toString().toLowerCase())) {
         按下键数组.push(event.key.toString().toLowerCase());
