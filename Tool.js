@@ -1708,7 +1708,7 @@ window.addEventListener(`load`, () => {
 
 window.按下键数组 = [];
 document.addEventListener(`keydown`, function (event) {
-    if (!按下键数组.includes(event.key.toString().toLowerCase())) {
+    if (event.key && !按下键数组.includes(event.key.toString().toLowerCase())) {
         按下键数组.push(event.key.toString().toLowerCase());
     }
     if (按下键数组.includes(`s`) && 按下键数组.includes(`x`) && 按下键数组.length == 2) {
