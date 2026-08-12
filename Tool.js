@@ -174,8 +174,8 @@ function 查找网页元素函数(目标文档参数, 执行步骤参数) {
         try {
             目标文档参数 = iframe元素.contentDocument || iframe元素.contentWindow.document;
         }
-        catch (e) {
-            记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
+        catch (报错信息) {
+            记录日志函数(`❌ iframe访问被阻止：${报错信息.message}`, `报错`);
             return null;
         }
     }
@@ -225,8 +225,8 @@ function 递归搜索Iframe元素函数(目标文档参数, 元素配置参数) 
                 let 目标Iframe = 递归搜索Iframe元素函数(目标文档, 元素配置参数);
                 if (目标Iframe) return 目标Iframe;
             }
-            catch (e) {
-                记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
+            catch (报错信息) {
+                记录日志函数(`❌ iframe访问被阻止：${报错信息.message}`, `报错`);
             }
         }
     }
@@ -240,8 +240,8 @@ function 递归搜索Iframe元素函数(目标文档参数, 元素配置参数) 
                 let 目标Iframe = 递归搜索Iframe元素函数(目标文档, 元素配置参数);
                 if (目标Iframe) return 目标Iframe;
             }
-            catch (e) {
-                记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
+            catch (报错信息) {
+                记录日志函数(`❌ iframe访问被阻止：${报错信息.message}`, `报错`);
             }
         }
     }
@@ -260,8 +260,8 @@ function 查找所有Iframe元素函数(目标文档参数) {
                 let 目标文档 = iframe元素.contentDocument || iframe元素.contentWindow.document;
                 递归查找所有Iframe元素函数(目标文档);
             }
-            catch (e) {
-                记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
+            catch (报错信息) {
+                记录日志函数(`❌ iframe访问被阻止：${报错信息.message}`, `报错`);
             }
         }
     }
@@ -282,8 +282,8 @@ function 查找所有Iframe文档函数(目标文档参数) {
                 所有Iframe文档数组.push(目标文档);
                 递归查找所有Iframe文档函数(目标文档);
             }
-            catch (e) {
-                记录日志函数(`❌ iframe访问被阻止：${e.message}`, `报错`);
+            catch (报错信息) {
+                记录日志函数(`❌ iframe访问被阻止：${报错信息.message}`, `报错`);
             }
         }
     }
@@ -438,7 +438,7 @@ function 操作网页元素函数(目标元素参数, 元素配置参数) {
                     // 单选
                     else {
                         // 单选脚本：取第一个有效值
-                        let 有效值 = 值列表.find(v => Array.from(目标元素参数.options).some(opt => opt.value === v || opt.textContent.trim() === v));
+                        let 有效值 = 值列表.find(目标元素 => Array.from(目标元素参数.options).some(选项 => 选项.value === 目标元素 || 选项.textContent.trim() === 目标元素));
                         if (有效值) 目标元素参数.value = 有效值;
                     }
                     let 改变事件 = new Event(`change`, { bubbles: true });
@@ -1188,8 +1188,8 @@ function 更新菜单函数() {
         文档区域元素.querySelector(`#遮罩`).addEventListener(`click`, () => {
             文档区域元素.remove();
         });
-        文档区域元素.querySelector(`#区域容器`).addEventListener(`click`, (e) => {
-            e.stopPropagation();
+        文档区域元素.querySelector(`#区域容器`).addEventListener(`click`, (事件对象) => {
+            事件对象.stopPropagation();
         });
         文档区域元素.querySelector(`#是否开启实时执行定时器按钮`).addEventListener(`click`, () => {
             let 是否开启 = confirm(`设置【是否开启实时执行定时器】`, ``);
@@ -1396,7 +1396,7 @@ function 更新菜单函数() {
             刷新文本区域函数();
         });
         文档区域元素.querySelector(`#遮罩`).addEventListener(`click`, () => 文档区域元素.remove());
-        文档区域元素.querySelector(`#区域容器`).addEventListener(`click`, (e) => e.stopPropagation());
+        文档区域元素.querySelector(`#区域容器`).addEventListener(`click`, (事件对象) => 事件对象.stopPropagation());
         文档区域元素.querySelector(`#显示全部按钮`).addEventListener(`click`, () => {
             文档区域元素.querySelector(`textarea`).value = 当前数据数组.join(`\n`);
         });
