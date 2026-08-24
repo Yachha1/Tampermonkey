@@ -1686,6 +1686,27 @@ function 转换时间函数(时间参数, 基准时间 = new Date()) {
     return 时间参数;
 }
 
+function 获取最新日期函数(目标文档参数, 类名称参数, 选择器参数) {
+    let 全部日期数组 = [];
+    if (类名称参数 != ``) {
+        全部日期数组 = 目标文档参数.getElementsByClassName(类名称参数);
+    }
+    else if (选择器参数 != ``) {
+        全部日期数组 = 目标文档参数.querySelectorAll(选择器参数);
+    }
+    let 最新日期 = Array.from(全部日期数组)
+        .map(时间元素 => 时间元素.textContent.trim().replaceAll(`[`, ``).replaceAll(`]`, ``).replaceAll(` `, ``).replaceAll(`发文日期：`, ``))
+        .filter(时间文本 => 时间文本 && !isNaN(new Date(时间文本)) && (时间文本.includes(`-`) || 时间文本.includes(`/`) || 时间文本.includes(`.`)))
+        .sort((时间1, 时间2) => new Date(时间2) - new Date(时间1))[0];
+
+    if (最新日期) {
+        return 最新日期;
+    }
+    else {
+        return ``;
+    }
+}
+
 function 记录日志函数(文本参数, 类型参数) {
     if (类型参数 == `日志`) {
         console.log(文本参数, new Date().toLocaleTimeString());
@@ -1757,4 +1778,9 @@ document.addEventListener(`keydown`, function (event) {
 
 document.addEventListener(`keyup`, function (event) {
     按下键数组.length = 0;
+    if (event.key && event.key.toString() == `Escape`) {
+        if (当前脚本名称 != `` && 是否正在运行) {
+            停止流程函数();
+        }
+    }
 });
