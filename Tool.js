@@ -32,12 +32,15 @@ window.当前批量打开网址脚本名称 = GM_getValue(`当前批量打开网
 window.按下键数组 = [];
 window.启动流程时间 = null;
 
-function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数) {
+function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数, 响应类型) {
     let 进度索引 = 0;
     let 完成数量 = 0;
     let 可用线程 = 总线程数;
     if (是否自动重定向参数 === undefined) {
         是否自动重定向参数 = true;
+    }
+    if (响应类型 === undefined) {
+        响应类型 = ``;
     }
 
     发起单个HTTP请求函数();
@@ -54,6 +57,7 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
                 method: `GET`,
                 url: 网站地址数组[当前索引],
                 redirect: 是否自动重定向参数 ? `follow` : `manual`,
+                responseType: 响应类型,
                 onload: function (响应信息) {
                     响应函数(响应信息, 当前索引);
 
@@ -115,6 +119,7 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
             method: `GET`,
             url: 网站地址数组[当前索引参数],
             redirect: 是否自动重定向参数 ? `follow` : `manual`,
+            responseType: 响应类型,
             onload: function (响应信息) {
                 响应函数(响应信息, 当前索引参数);
 
