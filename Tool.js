@@ -58,8 +58,8 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
                 url: 网站地址数组[当前索引],
                 redirect: 是否自动重定向参数 ? `follow` : `manual`,
                 responseType: 响应类型,
-                onload: function (响应信息) {
-                    响应函数(响应信息, 当前索引);
+                onload: async function (响应信息) {
+                    await 响应函数(响应信息, 当前索引);
 
                     可用线程++;
                     if (请求情况数组[当前索引].includes(`请求成功`)) {
@@ -81,8 +81,8 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
                         return;
                     }
                 },
-                onerror: function (报错信息) {
-                    报错函数(报错信息, 当前索引);
+                onerror: async function (报错信息) {
+                    await 报错函数(报错信息, 当前索引);
 
                     记录日志函数(`❌ 访问网址失败：\n${网站地址数组[当前索引]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
 
@@ -120,8 +120,8 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
             url: 网站地址数组[当前索引参数],
             redirect: 是否自动重定向参数 ? `follow` : `manual`,
             responseType: 响应类型,
-            onload: function (响应信息) {
-                响应函数(响应信息, 当前索引参数);
+            onload: async function (响应信息) {
+                await 响应函数(响应信息, 当前索引参数);
 
                 可用线程++;
                 if (请求情况数组[当前索引参数].includes(`请求成功`)) {
@@ -143,8 +143,8 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
                     return;
                 }
             },
-            onerror: function (报错信息) {
-                报错函数(报错信息, 当前索引参数);
+            onerror: async function (报错信息) {
+                await 报错函数(报错信息, 当前索引参数);
 
                 记录日志函数(`❌ 访问网址失败：\n${网站地址数组[当前索引参数]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
 
