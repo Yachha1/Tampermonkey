@@ -2,6 +2,7 @@ window.菜单ID数组 = GM_getValue(`菜单ID数组`, []);
 window.网站地址数组 = GM_getValue(`网站地址数组`, []);
 window.请求情况数组 = GM_getValue(`请求情况数组`, []);
 window.检索结果数组 = GM_getValue(`检索结果数组`, []);
+window.响应类型数组 = GM_getValue(`响应类型数组`, []);
 window.日志记录数组 = GM_getValue(`日志记录数组`, []);
 window.报错记录数组 = GM_getValue(`报错记录数组`, []);
 window.当前脚本名称 = GM_getValue(`当前脚本名称`, ``);
@@ -32,15 +33,18 @@ window.当前批量打开网址脚本名称 = GM_getValue(`当前批量打开网
 window.按下键数组 = [];
 window.启动流程时间 = null;
 
-function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数, 响应类型) {
+function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数, 响应类型参数, 是否输入响应类型参数) {
     let 进度索引 = 0;
     let 完成数量 = 0;
     let 可用线程 = 总线程数;
     if (是否自动重定向参数 === undefined) {
         是否自动重定向参数 = true;
     }
-    if (响应类型 === undefined) {
-        响应类型 = ``;
+    if (响应类型参数 === undefined) {
+        响应类型参数 = ``;
+    }
+    if (是否输入响应类型参数 === undefined) {
+        是否输入响应类型参数 = false;
     }
 
     发起单个HTTP请求函数();
@@ -53,11 +57,15 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
             可用线程--;
             let 当前索引 = 进度索引;
             进度索引++;
+            if (是否输入响应类型参数)
+            {
+                响应类型参数 = 响应类型数组[当前索引];
+            }
             GM_xmlhttpRequest({
                 method: `GET`,
                 url: 网站地址数组[当前索引],
                 redirect: 是否自动重定向参数 ? `follow` : `manual`,
-                responseType: 响应类型,
+                responseType: 响应类型参数,
                 onload: async function (响应信息) {
                     await 响应函数(响应信息, 当前索引);
 
@@ -115,11 +123,15 @@ function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否
             return;
         }
         可用线程--;
+        if (是否输入响应类型参数)
+        {
+            响应类型参数 = 响应类型数组[当前索引参数];
+        }
         GM_xmlhttpRequest({
             method: `GET`,
             url: 网站地址数组[当前索引参数],
             redirect: 是否自动重定向参数 ? `follow` : `manual`,
-            responseType: 响应类型,
+            responseType: 响应类型参数,
             onload: async function (响应信息) {
                 await 响应函数(响应信息, 当前索引参数);
 
