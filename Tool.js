@@ -3,6 +3,7 @@ window.网站地址数组 = GM_getValue(`网站地址数组`, []);
 window.请求情况数组 = GM_getValue(`请求情况数组`, []);
 window.检索结果数组 = GM_getValue(`检索结果数组`, []);
 window.响应类型数组 = GM_getValue(`响应类型数组`, []);
+window.剩余索引数组 = GM_getValue(`剩余索引数组`, []);
 window.日志记录数组 = GM_getValue(`日志记录数组`, []);
 window.报错记录数组 = GM_getValue(`报错记录数组`, []);
 window.当前脚本名称 = GM_getValue(`当前脚本名称`, ``);
@@ -34,6 +35,160 @@ window.按下键数组 = [];
 window.启动流程时间 = null;
 
 function 发起HTTP请求函数(响应函数, 报错函数, 结束函数, 是否自动重定向参数, 响应类型参数, 是否输入响应类型参数) {
+    let 完成数量 = 0;
+    let 可用线程 = 总线程数;
+    剩余索引数组.length = 0;
+    for (let i1 = 0; i1 < 网站地址数组.length; i1++) {
+        剩余索引数组.push(i1);
+    }
+    if (是否自动重定向参数 === undefined) {
+        是否自动重定向参数 = true;
+    }
+    if (响应类型参数 === undefined) {
+        响应类型参数 = ``;
+    }
+    if (是否输入响应类型参数 === undefined) {
+        是否输入响应类型参数 = false;
+    }
+
+    发起单个HTTP请求函数();
+
+    function 发起单个HTTP请求函数() {
+        while (可用线程 > 0) {
+            if (剩余索引数组.length == 0) {
+                break;
+            }
+            可用线程--;
+            let 当前索引 = 剩余索引数组[0];
+            剩余索引数组.splice(0, 1);
+            if (是否输入响应类型参数)
+            {
+                响应类型参数 = 响应类型数组[当前索引];
+            }
+            GM_xmlhttpRequest({
+                method: `GET`,
+                url: 网站地址数组[当前索引],
+                redirect: 是否自动重定向参数 ? `follow` : `manual`,
+                responseType: 响应类型参数,
+                onload: async function (响应信息) {
+                    await 响应函数(响应信息, 当前索引);
+
+                    可用线程++;
+                    if (请求情况数组[当前索引].includes(`请求完成`)) {
+                        完成数量++;
+                        记录日志函数(`✅ 进度：${完成数量}/${网站地址数组.length}`, `日志`);
+                        if (完成数量 < 网站地址数组.length) {
+                            发起单个HTTP请求函数();
+                        }
+                        else {
+                            结束函数();
+                            return;
+                        }
+                    }
+                    else if (请求情况数组[当前索引].includes(`重新请求`)) {
+                        发起指定HTTP请求函数(当前索引);
+                    }
+                    else {
+                        记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引]}\n当前索引：${当前索引}`, `报错`);
+                        return;
+                    }
+                },
+                onerror: async function (报错信息) {
+                    await 报错函数(报错信息, 当前索引);
+
+                    记录日志函数(`❌ 访问网址失败：\n${网站地址数组[当前索引]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
+
+                    可用线程++;
+                    if (请求情况数组[当前索引].includes(`请求完成`)) {
+                        完成数量++;
+                        记录日志函数(`✅ 进度：${完成数量}/${网站地址数组.length}`, `日志`);
+                        if (完成数量 < 网站地址数组.length) {
+                            发起单个HTTP请求函数();
+                        }
+                        else {
+                            结束函数();
+                            return;
+                        }
+                    }
+                    else if (请求情况数组[当前索引].includes(`重新请求`)) {
+                        发起指定HTTP请求函数(当前索引);
+                    }
+                    else {
+                        记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引]}\n当前索引：${当前索引}`, `报错`);
+                        return;
+                    }
+                }
+            });
+        }
+    }
+
+    function 发起指定HTTP请求函数(当前索引参数) {
+        if (当前索引参数 >= 网站地址数组.length) {
+            return;
+        }
+        可用线程--;
+        if (是否输入响应类型参数)
+        {
+            响应类型参数 = 响应类型数组[当前索引参数];
+        }
+        GM_xmlhttpRequest({
+            method: `GET`,
+            url: 网站地址数组[当前索引参数],
+            redirect: 是否自动重定向参数 ? `follow` : `manual`,
+            responseType: 响应类型参数,
+            onload: async function (响应信息) {
+                await 响应函数(响应信息, 当前索引参数);
+
+                可用线程++;
+                if (请求情况数组[当前索引参数].includes(`请求完成`)) {
+                    完成数量++;
+                    记录日志函数(`✅ 进度：${完成数量}/${网站地址数组.length}`, `日志`);
+                    if (完成数量 < 网站地址数组.length) {
+                        发起单个HTTP请求函数();
+                    }
+                    else {
+                        结束函数();
+                        return;
+                    }
+                }
+                else if (请求情况数组[当前索引参数].includes(`重新请求`)) {
+                    发起指定HTTP请求函数(当前索引参数);
+                }
+                else {
+                    记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引参数]}\n当前索引：${当前索引参数}`, `报错`);
+                    return;
+                }
+            },
+            onerror: async function (报错信息) {
+                await 报错函数(报错信息, 当前索引参数);
+
+                记录日志函数(`❌ 访问网址失败：\n${网站地址数组[当前索引参数]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
+
+                可用线程++;
+                if (请求情况数组[当前索引参数].includes(`请求完成`)) {
+                    完成数量++;
+                    记录日志函数(`✅ 进度：${完成数量}/${网站地址数组.length}`, `日志`);
+                    if (完成数量 < 网站地址数组.length) {
+                        发起单个HTTP请求函数();
+                    }
+                    else {
+                        结束函数();
+                        return;
+                    }
+                }
+                else if (请求情况数组[当前索引参数].includes(`重新请求`)) {
+                    发起指定HTTP请求函数(当前索引参数);
+                }
+                else {
+                    记录日志函数(`❌ 未知请求情况：\n${网站地址数组[当前索引参数]}\n当前索引：${当前索引参数}`, `报错`);
+                    return;
+                }
+            }
+        });
+    }
+}
+
+function 发起HTTP请求函数旧版(响应函数, 报错函数, 结束函数, 是否自动重定向参数, 响应类型参数, 是否输入响应类型参数) {
     let 进度索引 = 0;
     let 完成数量 = 0;
     let 可用线程 = 总线程数;
