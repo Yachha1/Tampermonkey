@@ -1897,17 +1897,17 @@ function 记录日志函数(文本参数, 类型参数) {
 }
 
 function 初始化函数() {
-    数据选项对象 = {};
+    window.数据选项对象 = {};//数据选项对象前必须加window.，不然显示异常
     let 全部变量 = Object.keys(window);
     全部变量.forEach(变量名 => {
         if (变量名.endsWith(`数组`) && Array.isArray(window[变量名])
             && 变量名 != `菜单ID数组`) {
-            数据选项对象[变量名] = window[变量名];
-            if (数据选项对象[变量名].length > 3000) {
+            window.数据选项对象[变量名] = window[变量名];
+            if (window.数据选项对象[变量名].length > 3000) {
                 记录日志函数(`⚠️ ${变量名} 数组长度超过3000`, `告警`);
             }
-            else if (数据选项对象[变量名].length > 5000) {
-                数据选项对象[变量名].length = 0;
+            else if (window.数据选项对象[变量名].length > 5000) {
+                window.数据选项对象[变量名].length = 0;
                 记录日志函数(`✅ ${变量名} 数组长度超过5000，清空！！！`, `日志`);
             }
         }
