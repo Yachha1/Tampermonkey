@@ -40,7 +40,9 @@ function 发起HTTP请求函数(请求网址数组, 响应函数, 报错函数, 
     let 可用线程 = 总线程数;
     剩余索引数组.length = 0;
     for (let i1 = 0; i1 < 请求网址数组.length; i1++) {
-        剩余索引数组.push(i1);
+        if (!请求情况数组[i1].includes(`请求完成`)) {
+            剩余索引数组.push(i1);
+        }
     }
     if (是否自动重定向参数 === undefined) {
         是否自动重定向参数 = true;
@@ -62,155 +64,6 @@ function 发起HTTP请求函数(请求网址数组, 响应函数, 报错函数, 
             可用线程--;
             let 当前索引 = 剩余索引数组[0];
             剩余索引数组.splice(0, 1);
-            if (是否输入响应类型参数) {
-                响应类型参数 = 响应类型数组[当前索引];
-            }
-            GM_xmlhttpRequest({
-                method: `GET`,
-                url: 请求网址数组[当前索引],
-                redirect: 是否自动重定向参数 ? `follow` : `manual`,
-                responseType: 响应类型参数,
-                onload: async function (响应信息) {
-                    await 响应函数(响应信息, 当前索引);
-
-                    可用线程++;
-                    if (请求情况数组[当前索引].includes(`请求完成`)) {
-                        HTTP请求完成数量++;
-                        记录日志函数(`✅ 进度：${HTTP请求完成数量}/${请求网址数组.length}`, `日志`);
-                        if (HTTP请求完成数量 < 请求网址数组.length) {
-                            发起单个HTTP请求函数();
-                        }
-                        else {
-                            结束函数();
-                            return;
-                        }
-                    }
-                    else if (请求情况数组[当前索引].includes(`重新请求`)) {
-                        发起指定HTTP请求函数(当前索引);
-                    }
-                    else {
-                        记录日志函数(`❌ 未知请求情况：\n${请求网址数组[当前索引]}\n当前索引：${当前索引}`, `报错`);
-                        return;
-                    }
-                },
-                onerror: async function (报错信息) {
-                    await 报错函数(报错信息, 当前索引);
-
-                    记录日志函数(`❌ 访问网址失败：\n${请求网址数组[当前索引]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
-
-                    可用线程++;
-                    if (请求情况数组[当前索引].includes(`请求完成`)) {
-                        HTTP请求完成数量++;
-                        记录日志函数(`✅ 进度：${HTTP请求完成数量}/${请求网址数组.length}`, `日志`);
-                        if (HTTP请求完成数量 < 请求网址数组.length) {
-                            发起单个HTTP请求函数();
-                        }
-                        else {
-                            结束函数();
-                            return;
-                        }
-                    }
-                    else if (请求情况数组[当前索引].includes(`重新请求`)) {
-                        发起指定HTTP请求函数(当前索引);
-                    }
-                    else {
-                        记录日志函数(`❌ 未知请求情况：\n${请求网址数组[当前索引]}\n当前索引：${当前索引}`, `报错`);
-                        return;
-                    }
-                }
-            });
-        }
-    }
-
-    function 发起指定HTTP请求函数(当前索引参数) {
-        if (当前索引参数 >= 请求网址数组.length) {
-            return;
-        }
-        可用线程--;
-        if (是否输入响应类型参数) {
-            响应类型参数 = 响应类型数组[当前索引参数];
-        }
-        GM_xmlhttpRequest({
-            method: `GET`,
-            url: 请求网址数组[当前索引参数],
-            redirect: 是否自动重定向参数 ? `follow` : `manual`,
-            responseType: 响应类型参数,
-            onload: async function (响应信息) {
-                await 响应函数(响应信息, 当前索引参数);
-
-                可用线程++;
-                if (请求情况数组[当前索引参数].includes(`请求完成`)) {
-                    HTTP请求完成数量++;
-                    记录日志函数(`✅ 进度：${HTTP请求完成数量}/${请求网址数组.length}`, `日志`);
-                    if (HTTP请求完成数量 < 请求网址数组.length) {
-                        发起单个HTTP请求函数();
-                    }
-                    else {
-                        结束函数();
-                        return;
-                    }
-                }
-                else if (请求情况数组[当前索引参数].includes(`重新请求`)) {
-                    发起指定HTTP请求函数(当前索引参数);
-                }
-                else {
-                    记录日志函数(`❌ 未知请求情况：\n${请求网址数组[当前索引参数]}\n当前索引：${当前索引参数}`, `报错`);
-                    return;
-                }
-            },
-            onerror: async function (报错信息) {
-                await 报错函数(报错信息, 当前索引参数);
-
-                记录日志函数(`❌ 访问网址失败：\n${请求网址数组[当前索引参数]}\nerror：${报错信息.error}\nstatus: ${报错信息.status}\nstatusText: ${报错信息.statusText}`, `报错`);
-
-                可用线程++;
-                if (请求情况数组[当前索引参数].includes(`请求完成`)) {
-                    HTTP请求完成数量++;
-                    记录日志函数(`✅ 进度：${HTTP请求完成数量}/${请求网址数组.length}`, `日志`);
-                    if (HTTP请求完成数量 < 请求网址数组.length) {
-                        发起单个HTTP请求函数();
-                    }
-                    else {
-                        结束函数();
-                        return;
-                    }
-                }
-                else if (请求情况数组[当前索引参数].includes(`重新请求`)) {
-                    发起指定HTTP请求函数(当前索引参数);
-                }
-                else {
-                    记录日志函数(`❌ 未知请求情况：\n${请求网址数组[当前索引参数]}\n当前索引：${当前索引参数}`, `报错`);
-                    return;
-                }
-            }
-        });
-    }
-}
-
-function 发起HTTP请求函数旧版(请求网址数组, 响应函数, 报错函数, 结束函数, 是否自动重定向参数, 响应类型参数, 是否输入响应类型参数) {
-    let 进度索引 = 0;
-    HTTP请求完成数量 = 0;
-    let 可用线程 = 总线程数;
-    if (是否自动重定向参数 === undefined) {
-        是否自动重定向参数 = true;
-    }
-    if (响应类型参数 === undefined) {
-        响应类型参数 = ``;
-    }
-    if (是否输入响应类型参数 === undefined) {
-        是否输入响应类型参数 = false;
-    }
-
-    发起单个HTTP请求函数();
-
-    function 发起单个HTTP请求函数() {
-        while (可用线程 > 0) {
-            if (进度索引 >= 请求网址数组.length) {
-                break;
-            }
-            可用线程--;
-            let 当前索引 = 进度索引;
-            进度索引++;
             if (是否输入响应类型参数) {
                 响应类型参数 = 响应类型数组[当前索引];
             }
@@ -1568,47 +1421,61 @@ function 更新菜单函数() {
         文档区域元素.querySelector(`#区域容器`).addEventListener(`click`, (事件对象) => 事件对象.stopPropagation());
         文档区域元素.querySelector(`#显示全部按钮`).addEventListener(`click`, () => {
             文档区域元素.querySelector(`textarea`).value = 当前数据数组.join(`\n`);
+            文档区域元素.querySelector(`#数据条数`).textContent = `共 ${当前数据数组.length} 条`;
         });
         文档区域元素.querySelector(`#仅显示✅按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
+            let 数量 = 0;
             for (let i1 = 0; i1 < 当前数据数组.length; i1++) {
                 if (当前数据数组[i1].includes(`✅`)) {
                     文本 += 当前数据数组[i1] + `\n`;
+                    数量++;
                 }
             }
             文档区域元素.querySelector(`textarea`).value = 文本;
+            文档区域元素.querySelector(`#数据条数`).textContent = `共 ${数量} 条`;
         });
         文档区域元素.querySelector(`#仅显示🖱️按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
+            let 数量 = 0;
             for (let i1 = 0; i1 < 当前数据数组.length; i1++) {
                 if (当前数据数组[i1].includes(`🖱️`)) {
                     文本 += 当前数据数组[i1] + `\n`;
+                    数量++;
                 }
             }
             文档区域元素.querySelector(`textarea`).value = 文本;
+            文档区域元素.querySelector(`#数据条数`).textContent = `共 ${数量} 条`;
         });
         文档区域元素.querySelector(`#仅显示❌按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
+            let 数量 = 0;
             for (let i1 = 0; i1 < 当前数据数组.length; i1++) {
                 if (当前数据数组[i1].includes(`❌`)) {
                     文本 += 当前数据数组[i1] + `\n`;
+                    数量++;
                 }
             }
             文档区域元素.querySelector(`textarea`).value = 文本;
+            文档区域元素.querySelector(`#数据条数`).textContent = `共 ${数量} 条`;
         });
         文档区域元素.querySelector(`#仅显示⚠️按钮`).addEventListener(`click`, () => {
             let 文本 = ``;
+            let 数量 = 0;
             for (let i1 = 0; i1 < 当前数据数组.length; i1++) {
                 if (当前数据数组[i1].includes(`⚠️`)) {
                     文本 += 当前数据数组[i1] + `\n`;
+                    数量++;
                 }
             }
             文档区域元素.querySelector(`textarea`).value = 文本;
+            文档区域元素.querySelector(`#数据条数`).textContent = `共 ${数量} 条`;
         });
         文档区域元素.querySelector(`#清空按钮`).addEventListener(`click`, () => {
             当前数据数组.length = 0;
             GM_setValue(当前数据选项, 当前数据数组);
             文档区域元素.querySelector(`textarea`).value = ``;
+            文档区域元素.querySelector(`#数据条数`).textContent = `共 0 条`;
         });
         文档区域元素.querySelector(`#复制按钮`).addEventListener(`click`, () => {
             GM_setClipboard(文档区域元素.querySelector(`#文本区域`).value);
@@ -1800,7 +1667,7 @@ function 转换时间函数(时间参数, 基准时间 = new Date()) {
     let 月 = 当前时间.getMonth() + 1;
     let 日 = 当前时间.getDate();
 
-    // 1. 处理“X小时前”
+    // 1. 处理 X小时前
     let 匹配X小时前 = 时间参数.match(/^(\d+)\s*小时前$/);
     if (匹配X小时前) {
         let 小时 = parseInt(匹配X小时前[1]);
@@ -1808,19 +1675,19 @@ function 转换时间函数(时间参数, 基准时间 = new Date()) {
         return 格式化时间函数(标准时间);
     }
 
-    // 2. 处理“昨天HH:MM”
-    if (时间参数.startsWith('昨天')) {
+    // 2. 处理 昨天HH:MM
+    if (时间参数.startsWith(`昨天`)) {
         let targetDate = new Date(当前时间.getTime() - 24 * 3600000);
         return 格式化时间函数(targetDate);
     }
 
-    // 3. 处理“前天HH:MM”
-    if (时间参数.startsWith('前天')) {
+    // 3. 处理 前天HH:MM
+    if (时间参数.startsWith(`前天`)) {
         let 标准时间 = new Date(当前时间.getTime() - 48 * 3600000);
         return 格式化时间函数(标准时间);
     }
 
-    // 4. 处理“X天前”
+    // 4. 处理 X天前
     let 匹配X天前 = 时间参数.match(/^(\d+)\s*天前$/);
     if (匹配X天前) {
         let days = parseInt(匹配X天前[1]);
@@ -1828,26 +1695,26 @@ function 转换时间函数(时间参数, 基准时间 = new Date()) {
         return 格式化时间函数(标准时间);
     }
 
-    // 5. 处理“MM月DD日”（默认为当前年份）
+    // 5. 处理 MM月DD日 （默认为当前年份）
     let 匹配月日 = 时间参数.match(/^(\d{1,2})\s*月\s*(\d{1,2})\s*日$/);
     if (匹配月日) {
         let 目标月 = parseInt(匹配月日[1]);
         let 目标日 = parseInt(匹配月日[2]);
         // 如果月份大于当前月份，则认为是去年
         let 目标年份 = (目标月 > 月) ? 年 - 1 : 年;
-        return `${目标年份}-${目标月.toString().padStart(2, '0')}-${目标日.toString().padStart(2, '0')}`;
+        return `${目标年份}-${目标月.toString().padStart(2, `0`)}-${目标日.toString().padStart(2, `0`)}`;
     }
 
-    // 6. 处理“YYYY年MM月DD日”
+    // 6. 处理 YYYY年MM月DD日
     let 匹配年月日 = 时间参数.match(/^(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日$/);
     if (匹配年月日) {
         let 目标年 = parseInt(匹配年月日[1]);
         let 目标月 = parseInt(匹配年月日[2]);
         let 目标日 = parseInt(匹配年月日[3]);
-        return `${目标年}-${目标月.toString().padStart(2, '0')}-${目标日.toString().padStart(2, '0')}`;
+        return `${目标年}-${目标月.toString().padStart(2, `0`)}-${目标日.toString().padStart(2, `0`)}`;
     }
 
-    // 7. 处理“YYYY-MM-DD”格式（直接返回）
+    // 7. 处理 YYYY-MM-DD 格式（直接返回）
     let 匹配标准格式 = 时间参数.match(/^\d{4}-\d{2}-\d{2}$/);
     if (匹配标准格式) return 时间参数;
 
