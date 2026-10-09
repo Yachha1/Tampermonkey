@@ -43,6 +43,9 @@ function 发起HTTP请求函数(请求网址数组, 响应函数, 报错函数, 
         if (!请求情况数组[i1].includes(`请求完成`)) {
             剩余索引数组.push(i1);
         }
+        else {
+            HTTP请求完成数量 ++;
+        }
     }
     if (是否自动重定向参数 === undefined) {
         是否自动重定向参数 = true;
